@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30114.105
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XperienceCommunity.PageNavigationRedirects", ".\src\XperienceCommunity.PageNavigationRedirects\XperienceCommunity.PageNavigationRedirects.csproj", "{6DED2C87-DE35-46CA-A73E-534DEB1FE403}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{D3C79033-6953-401B-8037-75033108B91A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XperienceCommunity.PageNavigationRedirects.Tests", "tests\XperienceCommunity.PageNavigationRedirects.Tests\XperienceCommunity.PageNavigationRedirects.Tests.csproj", "{771B6F3C-AA8F-4492-9034-52FFE3879457}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6DED2C87-DE35-46CA-A73E-534DEB1FE403}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6DED2C87-DE35-46CA-A73E-534DEB1FE403}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6DED2C87-DE35-46CA-A73E-534DEB1FE403}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6DED2C87-DE35-46CA-A73E-534DEB1FE403}.Release|Any CPU.Build.0 = Release|Any CPU
+		{771B6F3C-AA8F-4492-9034-52FFE3879457}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{771B6F3C-AA8F-4492-9034-52FFE3879457}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{771B6F3C-AA8F-4492-9034-52FFE3879457}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{771B6F3C-AA8F-4492-9034-52FFE3879457}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{771B6F3C-AA8F-4492-9034-52FFE3879457} = {D3C79033-6953-401B-8037-75033108B91A}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <Company>WiredViews</Company>
+    <Authors>$(Company)</Authors>
+    <Copyright>Copyright © $(Company) $([System.DateTime]::Now.Year)</Copyright>
+    <Trademark>$(Company)™</Trademark>
+    <Product>XperienceCommunity.PageNavigationRedirects</Product>
+    <VersionPrefix>1.0.0</VersionPrefix>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Title>$(Product)</Title>
+    <PackageProjectUrl>https://github.com/wiredviews/xperience-page-navigation-redirects</PackageProjectUrl>
+    <PackageIcon>wv-logo.png</PackageIcon>
+    <PackageTags>xperience;kentico;aspnetcore</PackageTags>
+    <PackageReleaseNotes>https://github.com/wiredviews/xperience-page-navigation-redirects/releases</PackageReleaseNotes>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+</Project>
