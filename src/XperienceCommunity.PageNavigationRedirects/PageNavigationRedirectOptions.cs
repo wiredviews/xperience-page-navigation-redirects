@@ -22,5 +22,10 @@ namespace XperienceCommunity.PageNavigationRedirects
         /// </summary>
         /// <value></value>
         public string FirstChildClassNameFieldName { get; set; } = "PageFirstChildClassName";
+        /// <summary>
+        /// Defaults to false / 302 HTTP status code redirects. If true then redirects will have a 301 HTTP status code.
+        /// </summary>
+        /// <value></value>
+        public bool UsePermanentRedirect { get; set; } = false;
     }
 }

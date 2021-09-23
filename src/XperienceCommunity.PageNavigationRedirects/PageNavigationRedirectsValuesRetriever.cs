@@ -5,11 +5,11 @@ using Microsoft.Extensions.Options;
 
 namespace XperienceCommunity.PageNavigationRedirects
 {
-    public class PageNavigationRedirectValuesRetriever
+    public class PageNavigationRedirectsValuesRetriever
     {
         private readonly PageNavigationRedirectOptions options;
 
-        public PageNavigationRedirectValuesRetriever(IOptions<PageNavigationRedirectOptions> options)
+        public PageNavigationRedirectsValuesRetriever(IOptions<PageNavigationRedirectOptions> options)
         {
             this.options = options.Value ?? throw new ArgumentNullException(nameof(options.Value));
         }
@@ -64,11 +64,11 @@ namespace XperienceCommunity.PageNavigationRedirects
                 return null;
             }
 
-            string url = ValidationHelper.GetString(customDataValue, "");
+            string className = ValidationHelper.GetString(customDataValue, "").Trim();
 
-            return string.IsNullOrWhiteSpace(url)
+            return string.IsNullOrWhiteSpace(className)
                 ? null
-                : url;
+                : className;
         }
     }
 }

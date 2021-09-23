@@ -17,12 +17,13 @@ namespace Microsoft.Extensions.DependencyInjection
                 .Configure<PageNavigationRedirectOptions>(configureOptions);
 
         /// <summary>
-        /// Adds Page Navigation Redirects
+        /// Adds Page Navigation Redirects functionality
         /// </summary>
         /// <param name="services"></param>
         /// <returns></returns>
         public static IServiceCollection AddPageNavigationRedirects(this IServiceCollection services) =>
             services
+                .AddTransient<PageNavigationRedirectsValuesRetriever>()
                 .AddControllersWithViews(options =>
                 {
                     options.Filters.Add(typeof(PageCustomDataRedirectResourceFilter));

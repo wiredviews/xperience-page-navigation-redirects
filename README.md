@@ -12,106 +12,138 @@ This package should be used in combination with the [XperienceCommunity.PageCust
 
 ## How to Use?
 
-1. Add the [XperienceCommunity.PageCustomDataControlExtender](https://github.com/wiredviews/xperience-page-custom-data-control-extender) NuGet package to the CMSApp administration application
+1.  Add the [XperienceCommunity.PageCustomDataControlExtender](https://github.com/wiredviews/xperience-page-custom-data-control-extender) NuGet package to the CMSApp administration application
 
-1. Create inheriting Form Controls for 3 existing Form Controls using the XperienceCommunity.PageCustomDataControlExtender
+1.  Create inheriting Form Controls for existing Form Controls using the XperienceCommunity.PageCustomDataControlExtender
 
-   ![Page CustomData Form Controls](./images/06-page-custom-data-form-controls.jpg)
+    ![Page CustomData Form Controls](./images/06-page-custom-data-form-controls.jpg)
 
-   1. The "Drop-down list" Form Control, which should be assigned the following after creation
+    1. The "Drop-down list" Form Control, which should be assigned the following after creation
 
-      - Use Control for: `Text`
-      - Show control in: `Page types`
+       - Use Control for: `Text`
+       - Show control in: `Page types`
 
-      ![Custom Drop-down list control](./images/01-drop-down-list-form-control.jpg)
+       ![Custom Drop-down list control](./images/01-drop-down-list-form-control.jpg)
 
-   1. The "Page Selector" Form Control, which should be assigned the following after creation
+    1. The "Page Selector" Form Control, which should be assigned the following after creation
 
-      - Use Control for: `Unique identifier (GUID)`
-      - Show control in: `Page types`
+       - Use Control for: `Unique identifier (GUID)`
+       - Show control in: `Page types`
 
-      ![Custom Page Selector control](./images/02-page-selector-form-control.jpg)
+       ![Custom Page Selector control](./images/02-page-selector-form-control.jpg)
 
-   1. The "URL Checker" Form Control, which should be assigned the following after creation
+    1. The "URL Checker" Form Control, which should be assigned the following after creation
 
-      - Use Control for: `Text`
-      - Show control in: `Page types`
+       - Use Control for: `Text`
+       - Show control in: `Page types`
 
-      ![Custom URL Checker control](./images/03-url-checker-form-control.jpg)
+       ![Custom URL Checker control](./images/03-url-checker-form-control.jpg)
 
-1. Install the NuGet package in your Kentico Xperience live site (Content Delivery) ASP.NET Core project
+    1. (optional) The "Text Box" Form Control, which should be assigned the following after creation
 
-   ```bash
-   dotnet add package XperienceCommunity.PageNavigationRedirects
-   ```
+       - Use Control for: `Text`
+       - Show control in: `Page types`
 
-1. Use the custom Form Controls you created above to create 3 new fields on a Page Type you would like to have Navigation Redirection functionality
+       ![Custom URL Checker control](./images/03a-text-box-form-control.jpg)
 
-   **Note**: It's recommended to have a "Base" Page Type (see: '[Inherits fields from pages type](https://docs.xperience.io/developing-websites/defining-website-content-structure/managing-page-types/reference-page-type-properties)') so that the Navigation Redirection only needs configured once and then applies to all navigable Page Types
+1.  Install the NuGet package in your Kentico Xperience live site (Content Delivery) ASP.NET Core project
 
-   ![Base Public Page Type inheritance](./images/05-base-public-page-type-inheritance.jpg)
+        dotnet add package XperienceCommunity.PageNavigationRedirects
 
-   **Note**: All of these Page Type fields need to be created using the "Field without database representation" Field Type. Since these have no database representation, adding these fields won't impact your database schema and adding them to a "Base" Page Type will only update the `CMS_Class` database table record for the inheriting Page Types.
+1.  Use the custom Form Controls you created above to create 3 (or 4) new fields on a Page Type you would like to have Navigation Redirection functionality
 
-   1. Redirection Type
+    **Note**: It's recommended to have a "Base" Page Type (see: '[Inherits fields from pages type](https://docs.xperience.io/developing-websites/defining-website-content-structure/managing-page-types/reference-page-type-properties)') so that the Navigation Redirection only needs configured once and then applies to all navigable Page Types
 
-      - Field name: `PageRedirectionType`
-      - Data type: `Text`
-      - Default value: `None`
-      - Field caption: `Redirection Type`
-      - Form control: `Page CustomData Drop-down list`
-      - List of options:
+    ![Base Public Page Type inheritance](./images/05-base-public-page-type-inheritance.jpg)
 
-      ```bash
-      None,
-      Internal,
-      External,
-      FirstChild;First Child
-      ```
+    **Note**: All of these Page Type fields need to be created using the "Field without database representation" Field Type. Since these have no database representation, adding these fields won't impact your database schema and adding them to a "Base" Page Type will only update the `CMS_Class` database table record for the inheriting Page Types.
 
-      - Has depending fields: `true`
+    ![Base Public Page Page Type fields](./images/04-base-public-page-fields.jpg)
 
-   1. Internal Redirect
+    1.  Redirection Type
 
-      - Field name: `PageInternalRedirectNodeGuid`
-      - Data type: `Unique identifier (GUID)`
-      - Field caption: `Internal URL`
-      - Form control: `Page CustomData Page Selector`
-      - Visibility condition: `{% PageRedirectionType == "Internal" %}`
-      - Depends on another field: `true`
+        - Field name: `PageRedirectionType`
+        - Data type: `Text`
+        - Default value: `None`
+        - Field caption: `Redirection Type`
+        - Form control: `Page CustomData Drop-down list`
+        - List of options:
 
-   1. External Redirect
+              None,
+              Internal,
+              External,
+              FirstChild;First Child
 
-      - Field name: `PageExternalRedirectURL`
-      - Data type: `Text`
-      - Field caption: `External URL`
-      - Form control: `Page CustomData URL Checker`
-      - Visibility condition: `{% PageRedirectionType == "External" %}`
-      - Depends on another field: `true`
+        - Has depending fields: `true`
 
-   ![Base Public Page Page Type fields](./images/04-base-public-page-fields.jpg)
+    1.  Internal Redirect
 
-1. Now create an instance of this Page Type and select the options for navigation redirection that you need
+        - Field name: `PageInternalRedirectNodeGuid`
+        - Data type: `Unique identifier (GUID)`
+        - Field caption: `Internal URL`
+        - Form control: `Page CustomData Page Selector`
+        - Visibility condition: `{% PageRedirectionType == "Internal" %}`
+        - Depends on another field: `true`
 
-   ![Article Page Content Form](./images/07-page-content-form.jpg)
+    1.  External Redirect
 
-1. Add the `ResourceRedirectFilter` to your ASP.NET Core Mvc configuration:
+        - Field name: `PageExternalRedirectURL`
+        - Data type: `Text`
+        - Field caption: `External URL`
+        - Form control: `Page CustomData URL Checker`
+        - Visibility condition: `{% PageRedirectionType == "External" %}`
+        - Depends on another field: `true`
 
-   ```csharp
-   // Example Startup.cs
+    1.  First Child Page Type (Optional)
 
-   public void ConfigureServices(IServiceCollection services)
-   {
-      services.AddKentico();
+        - Field name: `PageFirstChildClassName`
+        - Data type: `Text`
+        - Field caption: `First Child Page Type`
+        - Form control: `Page CustomData URL Checker`
+        - Visibility condition: `{% PageRedirectionType == "FirstChild" %}`
+        - Depends on another field: `true`
 
-      // ...
+    **Note**: Any of the field names canbe customized
 
-      services.AddControllersWithViews(options =>
-      {
-         options.Filters.Add(typeof(RedirectResourceFilter));
-      });
-   }
-   ```
+1.  Now create an instance of this Page Type and select the options for navigation redirection that you need
+
+    ![Article Page Content Form](./images/07-page-content-form.jpg)
+
+1.  Add the `ResourceRedirectFilter` to your ASP.NET Core Mvc configuration:
+
+    ```csharp
+    // Example Startup.cs
+
+    public void ConfigureServices(IServiceCollection services)
+    {
+       services.AddKentico();
+
+       // ...
+
+       services.AddPageNavigationRedirects();
+    }
+    ```
+
+    Or, if customizing the integration options
+
+    ```csharp
+    // Example Startup.cs
+
+    public void ConfigureServices(IServiceCollection services)
+    {
+       services.AddKentico();
+
+       // ...
+
+       services.AddPageNavigationRedirects(options =>
+       {
+          options.RedirectionTypeFieldName = "RedirectionType";
+          options.UsePermanentRedirect = true;
+
+          // ...
+       });
+    }
+    ```
 
 ## How Does It Work?
 
@@ -134,7 +166,9 @@ The three fields we add to the custom Page Type allows us to handle the most com
 
 An ASP.NET Core [Resource Filter](https://docs.microsoft.com/en-us/aspnet/core/mvc/controllers/filters?view=aspnetcore-5.0#resource-filters) has access to the [PageDataContext](https://docs.xperience.io/developing-websites/implementing-routing/content-tree-based-routing/setting-up-content-tree-based-routing#Settingupcontenttreebasedrouting-Accessingthedataofthecurrentpage) when using [Content Tree based routing](https://docs.xperience.io/developing-websites/implementing-routing/content-tree-based-routing) (custom routing can control redirects programatically). The `PageDataContext` includes the current `TreeNode`, and accessing the Page Navigation Redirection values for the given Page allows the Resource Filter to perform the appropriate redirection.
 
-<video src="./images/08-redirection-type-selection.mp4" controls width="600"></video>
+<video src="./images/08-redirection-type-selection.mp4" controls width="600">
+  <p>Watch [video demo](./images/08-redirection-type-selection.mp4) of setting the navigation redirect on a Page.</p>
+</video>
 
 ## References
 

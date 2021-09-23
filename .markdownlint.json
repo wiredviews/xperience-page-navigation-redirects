@@ -1,4 +1,6 @@
 {
   "html": false,
-  "line-length": false
+  "line-length": false,
+  "code-block-style": false,
+  "list-marker-space": false
 }
