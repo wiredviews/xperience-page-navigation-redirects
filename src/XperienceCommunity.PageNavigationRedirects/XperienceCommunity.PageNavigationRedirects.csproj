@@ -3,16 +3,20 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <Description>
-      An ASP.NET Core ResourceFilter that can redirect HTTP requests to other URLs, configurable from the Xperience Administration application
+      An ASP.NET Core ResourceFilter that can redirect HTTP requests to other URLs, configurable per-Page from the Xperience Administration application
     </Description>
   </PropertyGroup>
 
   <ItemGroup>
-		<FrameworkReference Include="Microsoft.AspNetCore.App" />
-	</ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Kentico.Xperience.AspNetCore.WebApp" Version="13.0.0" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
 </Project>
