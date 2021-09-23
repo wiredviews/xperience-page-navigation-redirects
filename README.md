@@ -2,7 +2,7 @@
 
 [![NuGet Package](https://img.shields.io/nuget/v/XperienceCommunity.PageNavigationRedirects.svg)](https://www.nuget.org/packages/XperienceCommunity.PageNavigationRedirects)
 
-An ASP.NET Core ResourceFilter that can redirect HTTP requests to other URLs, configurable from the Xperience Administration application
+An ASP.NET Core ResourceFilter that can redirect HTTP requests to other URLs, configurable per Page from the Xperience Administration application
 
 ## Dependencies
 
