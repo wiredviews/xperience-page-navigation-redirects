@@ -67,13 +67,15 @@ namespace XperienceCommunity.PageNavigationRedirects
                 return null;
             }
 
+            bool usePermanentRedirects = valuesRetriever.UsePermanentRedirects(page);
+
             if (redirectionType == PageRedirectionType.External)
             {
                 string? url = valuesRetriever.ExternalRedirectURL(page);
 
                 return url is null
                     ? null
-                    : new RedirectResult(url, options.UsePermanentRedirect);
+                    : new RedirectResult(url, usePermanentRedirects);
             }
 
             if (redirectionType == PageRedirectionType.Internal)
@@ -101,7 +103,7 @@ namespace XperienceCommunity.PageNavigationRedirects
 
                 return url is null
                     ? null
-                    : new RedirectResult(url.RelativePath, options.UsePermanentRedirect);
+                    : new RedirectResult(url.RelativePath, usePermanentRedirects);
             }
 
             if (redirectionType == PageRedirectionType.FirstChild)
@@ -151,7 +153,7 @@ namespace XperienceCommunity.PageNavigationRedirects
 
                 return url is null
                     ? null
-                    : new RedirectResult(url.RelativePath, options.UsePermanentRedirect);
+                    : new RedirectResult(url.RelativePath, usePermanentRedirects);
             }
 
             return null;

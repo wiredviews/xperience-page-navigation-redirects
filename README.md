@@ -20,33 +20,45 @@ This package should be used in combination with the [XperienceCommunity.PageCust
 
     ![Page CustomData Form Controls](./images/06-page-custom-data-form-controls.jpg)
 
-    1. The "Drop-down list" Form Control, which should be assigned the following after creation
+    1. The "Drop-down list" Form Control
 
+       - Used to select the redirect type
        - Use Control for: `Text`
        - Show control in: `Page types`
 
        ![Custom Drop-down list control](./images/01-drop-down-list-form-control.jpg)
 
-    1. The "Page Selector" Form Control, which should be assigned the following after creation
+    1. The "Page Selector" Form Control
 
+       - Used for internal redirects
        - Use Control for: `Unique identifier (GUID)`
        - Show control in: `Page types`
 
        ![Custom Page Selector control](./images/02-page-selector-form-control.jpg)
 
-    1. The "URL Checker" Form Control, which should be assigned the following after creation
+    1. The "URL Checker" Form Control
 
+       - Used for external redirects
        - Use Control for: `Text`
        - Show control in: `Page types`
 
        ![Custom URL Checker control](./images/03-url-checker-form-control.jpg)
 
-    1. (optional) The "Text Box" Form Control, which should be assigned the following after creation
+    1. (optional) The "Text Box" Form Control
 
+       - Used for setting the First Child Class Name
        - Use Control for: `Text`
        - Show control in: `Page types`
 
        ![Custom URL Checker control](./images/03a-text-box-form-control.jpg)
+
+    1. (optional) The "Three state checkbox" Form Control
+
+       - Used for setting the redirect status code (301 vs 302) per-Page
+       - Use Control for: `Integer number`
+       - Show control in: `Page types`
+
+       ![Custom Check box control](./images/03b-three-state-check-box-form-control.jpg)
 
 1.  Install the NuGet package in your Kentico Xperience live site (Content Delivery) ASP.NET Core project
 
@@ -101,11 +113,20 @@ This package should be used in combination with the [XperienceCommunity.PageCust
         - Field name: `PageFirstChildClassName`
         - Data type: `Text`
         - Field caption: `First Child Page Type`
-        - Form control: `Page CustomData URL Checker`
+        - Form control: `Page CustomData Text box`
         - Visibility condition: `{% PageRedirectionType == "FirstChild" %}`
         - Depends on another field: `true`
 
-    **Note**: Any of the field names canbe customized
+    1.  Permanent Redirect (Optional)
+
+        - Field name: `PageUsePermanentRedirects`
+        - Data type: `Integer number`
+        - Field caption: `Use Permanent (301) Redirects?`
+        - Form control: `Page CustomData Three state check box`
+        - Visibility condition: `{% PageRedirectionType == "External" || PageRedirectionType == "Internal" || PageRedirectionType == "FirstChild" %}`
+        - Depends on another field: `true`
+
+    **Note**: Any of the field names canbe customized through the `IServiceCollection` extension shown below.
 
 1.  Now create an instance of this Page Type and select the options for navigation redirection that you need
 
@@ -165,6 +186,9 @@ The three fields we add to the custom Page Type allows us to handle the most com
   - Content Managers can enter any valid URL to redirect to
 - First Child
   - The first child Page will be the destination for redirection, so that `NodeOrder` of child Pages effectively controls the redirection URL
+  - Children can be limited to a specific Page Type via Class Name if there are children of multiple Page Types
+
+All of the redirects can be set to be 301 or 302 globally (global default is 302), and then overridden per-Page
 
 An ASP.NET Core [Resource Filter](https://docs.microsoft.com/en-us/aspnet/core/mvc/controllers/filters?view=aspnetcore-5.0#resource-filters) has access to the [PageDataContext](https://docs.xperience.io/developing-websites/implementing-routing/content-tree-based-routing/setting-up-content-tree-based-routing#Settingupcontenttreebasedrouting-Accessingthedataofthecurrentpage) when using [Content Tree based routing](https://docs.xperience.io/developing-websites/implementing-routing/content-tree-based-routing) (custom routing can control redirects programatically). The `PageDataContext` includes the current `TreeNode`, and accessing the Page Navigation Redirection values for the given Page allows the Resource Filter to perform the appropriate redirection.
 

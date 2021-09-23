@@ -1,9 +1,9 @@
 using System;
+using AutoFixture;
 using CMS.DataEngine;
 using CMS.DocumentEngine;
 using CMS.Tests;
 using FluentAssertions;
-using Microsoft.Extensions.Options;
 using NUnit.Framework;
 using Tests.DocumentEngine;
 
@@ -23,14 +23,16 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
         [Test]
         public void RedirectionType_Will_Return_None_When_No_Data()
         {
-            var options = new PageNavigationRedirectOptions();
+            var fixture = new Fixture();
+
+            var options = fixture.CreateOptions();
 
             var page = TreeNode.New<TreeNode>().With(p =>
             {
 
             });
 
-            var sut = new PageNavigationRedirectsValuesRetriever(Options.Create(options));
+            var sut = new PageNavigationRedirectsValuesRetriever(options);
 
             var redirectionType = sut.RedirectionType(page);
 
@@ -40,14 +42,16 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
         [Test]
         public void RedirectionType_Will_Return_None_When_Value_Cannot_Be_Parsed()
         {
-            var options = new PageNavigationRedirectOptions();
+            var fixture = new Fixture();
+
+            var options = fixture.CreateOptions();
 
             var page = TreeNode.New<TreeNode>().With(p =>
             {
-                p.DocumentCustomData.SetValue(options.RedirectionTypeFieldName, "hello");
+                p.DocumentCustomData.SetValue(options.Value.RedirectionTypeFieldName, "hello");
             });
 
-            var sut = new PageNavigationRedirectsValuesRetriever(Options.Create(options));
+            var sut = new PageNavigationRedirectsValuesRetriever(options);
 
             var redirectionType = sut.RedirectionType(page);
 
@@ -57,34 +61,16 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
         [Test]
         public void RedirectionType_Will_Return_Custom_Value_When_Set()
         {
-            var options = new PageNavigationRedirectOptions();
+            var fixture = new Fixture();
+
+            var options = fixture.CreateOptions();
 
             var page = TreeNode.New<TreeNode>().With(p =>
             {
-                p.DocumentCustomData.SetValue(options.RedirectionTypeFieldName, PageRedirectionType.FirstChild);
+                p.DocumentCustomData.SetValue(options.Value.RedirectionTypeFieldName, PageRedirectionType.FirstChild);
             });
 
-            var sut = new PageNavigationRedirectsValuesRetriever(Options.Create(options));
-
-            var redirectionType = sut.RedirectionType(page);
-
-            redirectionType.Should().Be(PageRedirectionType.FirstChild);
-        }
-
-        [Test]
-        public void RedirectionType_Will_Return_Custom_Value_When_Set_With_Custom_Options()
-        {
-            var options = new PageNavigationRedirectOptions
-            {
-                RedirectionTypeFieldName = "abc"
-            };
-
-            var page = TreeNode.New<TreeNode>().With(p =>
-            {
-                p.DocumentCustomData.SetValue(options.RedirectionTypeFieldName, PageRedirectionType.FirstChild);
-            });
-
-            var sut = new PageNavigationRedirectsValuesRetriever(Options.Create(options));
+            var sut = new PageNavigationRedirectsValuesRetriever(options);
 
             var redirectionType = sut.RedirectionType(page);
 
@@ -94,14 +80,16 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
         [Test]
         public void ExternalRedirectURL_Will_Return_null_When_No_Data()
         {
-            var options = new PageNavigationRedirectOptions();
+            var fixture = new Fixture();
+
+            var options = fixture.CreateOptions();
 
             var page = TreeNode.New<TreeNode>().With(p =>
             {
 
             });
 
-            var sut = new PageNavigationRedirectsValuesRetriever(Options.Create(options));
+            var sut = new PageNavigationRedirectsValuesRetriever(options);
 
             string? url = sut.ExternalRedirectURL(page);
 
@@ -111,14 +99,16 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
         [Test]
         public void ExternalRedirectURL_Will_Return_null_When_Value_Is_Empty()
         {
-            var options = new PageNavigationRedirectOptions();
+            var fixture = new Fixture();
+
+            var options = fixture.CreateOptions();
 
             var page = TreeNode.New<TreeNode>().With(p =>
             {
-                p.DocumentCustomData.SetValue(options.ExternalRedirectURLFieldName, "");
+                p.DocumentCustomData.SetValue(options.Value.ExternalRedirectURLFieldName, "");
             });
 
-            var sut = new PageNavigationRedirectsValuesRetriever(Options.Create(options));
+            var sut = new PageNavigationRedirectsValuesRetriever(options);
 
             string? url = sut.ExternalRedirectURL(page);
 
@@ -128,55 +118,36 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
         [Test]
         public void ExternalRedirectURL_Will_Return_Custom_Value_When_Set()
         {
-            string data = "https://localhost";
+            var fixture = new Fixture();
 
-            var options = new PageNavigationRedirectOptions();
-
-            var page = TreeNode.New<TreeNode>().With(p =>
-            {
-                p.DocumentCustomData.SetValue(options.ExternalRedirectURLFieldName, data);
-            });
-
-            var sut = new PageNavigationRedirectsValuesRetriever(Options.Create(options));
-
-            string? url = sut.ExternalRedirectURL(page);
-
-            url.Should().Be(data);
-        }
-
-        [Test]
-        public void ExternalRedirectURL_Will_Return_Custom_Value_When_Set_With_Custom_Options()
-        {
-            string data = "https://localhost";
-
-            var options = new PageNavigationRedirectOptions
-            {
-                ExternalRedirectURLFieldName = "abc"
-            };
+            var options = fixture.CreateOptions();
+            string redirectUrl = fixture.Create<string>();
 
             var page = TreeNode.New<TreeNode>().With(p =>
             {
-                p.DocumentCustomData.SetValue(options.ExternalRedirectURLFieldName, data);
+                p.DocumentCustomData.SetValue(options.Value.ExternalRedirectURLFieldName, redirectUrl);
             });
 
-            var sut = new PageNavigationRedirectsValuesRetriever(Options.Create(options));
+            var sut = new PageNavigationRedirectsValuesRetriever(options);
 
             string? url = sut.ExternalRedirectURL(page);
 
-            url.Should().Be(data);
+            url.Should().Be(redirectUrl);
         }
 
         [Test]
         public void InternalRedirectNodeGUID_Will_Return_null_When_No_Data()
         {
-            var options = new PageNavigationRedirectOptions();
+            var fixture = new Fixture();
+
+            var options = fixture.CreateOptions();
 
             var page = TreeNode.New<TreeNode>().With(p =>
             {
 
             });
 
-            var sut = new PageNavigationRedirectsValuesRetriever(Options.Create(options));
+            var sut = new PageNavigationRedirectsValuesRetriever(options);
 
             Guid? nodeGUID = sut.InternalRedirectNodeGUID(page);
 
@@ -186,14 +157,16 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
         [Test]
         public void InternalRedirectNodeGUID_Will_Return_null_When_Default_Value()
         {
-            var options = new PageNavigationRedirectOptions();
+            var fixture = new Fixture();
+
+            var options = fixture.CreateOptions();
 
             var page = TreeNode.New<TreeNode>().With(p =>
             {
-                p.DocumentCustomData.SetValue(options.InternalRedirectNodeGUIDFieldName, default(Guid));
+                p.DocumentCustomData.SetValue(options.Value.InternalRedirectNodeGUIDFieldName, default(Guid));
             });
 
-            var sut = new PageNavigationRedirectsValuesRetriever(Options.Create(options));
+            var sut = new PageNavigationRedirectsValuesRetriever(options);
 
             Guid? nodeGUID = sut.InternalRedirectNodeGUID(page);
 
@@ -203,38 +176,17 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
         [Test]
         public void InternalRedirectNodeGUID_Will_Return_Custom_Value_When_Set()
         {
-            Guid guid = Guid.NewGuid();
+            var fixture = new Fixture();
 
-            var options = new PageNavigationRedirectOptions();
-
-            var page = TreeNode.New<TreeNode>().With(p =>
-            {
-                p.DocumentCustomData.SetValue(options.InternalRedirectNodeGUIDFieldName, guid);
-            });
-
-            var sut = new PageNavigationRedirectsValuesRetriever(Options.Create(options));
-
-            Guid? nodeGUID = sut.InternalRedirectNodeGUID(page);
-
-            nodeGUID.Should().Be(guid);
-        }
-
-        [Test]
-        public void InternalRedirectNodeGUID_Will_Return_Custom_Value_When_Set_With_Custom_Options()
-        {
-            Guid guid = Guid.NewGuid();
-
-            var options = new PageNavigationRedirectOptions
-            {
-                InternalRedirectNodeGUIDFieldName = "abc"
-            };
+            var options = fixture.CreateOptions();
+            Guid guid = fixture.Create<Guid>();
 
             var page = TreeNode.New<TreeNode>().With(p =>
             {
-                p.DocumentCustomData.SetValue(options.InternalRedirectNodeGUIDFieldName, guid);
+                p.DocumentCustomData.SetValue(options.Value.InternalRedirectNodeGUIDFieldName, guid);
             });
 
-            var sut = new PageNavigationRedirectsValuesRetriever(Options.Create(options));
+            var sut = new PageNavigationRedirectsValuesRetriever(options);
 
             Guid? nodeGUID = sut.InternalRedirectNodeGUID(page);
 
@@ -244,14 +196,16 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
         [Test]
         public void FirstChildClassName_Will_Return_null_When_No_Data()
         {
-            var options = new PageNavigationRedirectOptions();
+            var fixture = new Fixture();
+
+            var options = fixture.CreateOptions();
 
             var page = TreeNode.New<TreeNode>().With(p =>
             {
 
             });
 
-            var sut = new PageNavigationRedirectsValuesRetriever(Options.Create(options));
+            var sut = new PageNavigationRedirectsValuesRetriever(options);
 
             string? className = sut.FirstChildClassName(page);
 
@@ -261,14 +215,16 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
         [Test]
         public void FirstChildClassName_Will_Return_null_When_Default_Value()
         {
-            var options = new PageNavigationRedirectOptions();
+            var fixture = new Fixture();
+
+            var options = fixture.CreateOptions();
 
             var page = TreeNode.New<TreeNode>().With(p =>
             {
-                p.DocumentCustomData.SetValue(options.FirstChildClassNameFieldName, "");
+                p.DocumentCustomData.SetValue(options.Value.FirstChildClassNameFieldName, "");
             });
 
-            var sut = new PageNavigationRedirectsValuesRetriever(Options.Create(options));
+            var sut = new PageNavigationRedirectsValuesRetriever(options);
 
             string? className = sut.FirstChildClassName(page);
 
@@ -278,16 +234,17 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
         [Test]
         public void FirstChildClassName_Will_Return_Custom_Value_When_Set()
         {
-            string codeName = "Sandbox.PageType";
+            var fixture = new Fixture();
 
-            var options = new PageNavigationRedirectOptions();
+            var options = fixture.CreateOptions();
+            string codeName = fixture.Create<string>();
 
             var page = TreeNode.New<TreeNode>().With(p =>
             {
-                p.DocumentCustomData.SetValue(options.FirstChildClassNameFieldName, codeName);
+                p.DocumentCustomData.SetValue(options.Value.FirstChildClassNameFieldName, codeName);
             });
 
-            var sut = new PageNavigationRedirectsValuesRetriever(Options.Create(options));
+            var sut = new PageNavigationRedirectsValuesRetriever(options);
 
             string? className = sut.FirstChildClassName(page);
 
@@ -295,25 +252,45 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
         }
 
         [Test]
-        public void FirstChildClassName_Will_Return_Custom_Value_When_Set_With_Custom_Options()
+        public void UsePermanentRedirects_Will_Return_Options_Value_When_No_Value()
         {
-            string codeName = "Sandbox.PageType";
+            var fixture = new Fixture();
 
-            var options = new PageNavigationRedirectOptions
-            {
-                FirstChildClassNameFieldName = "abc"
-            };
+            var options = fixture.CreateOptions();
 
             var page = TreeNode.New<TreeNode>().With(p =>
             {
-                p.DocumentCustomData.SetValue(options.FirstChildClassNameFieldName, codeName);
+                p.DocumentCustomData.SetValue(options.Value.PageUsePermanentRedirectsFieldName, null);
             });
 
-            var sut = new PageNavigationRedirectsValuesRetriever(Options.Create(options));
+            var sut = new PageNavigationRedirectsValuesRetriever(options);
 
-            string? className = sut.FirstChildClassName(page);
+            bool usePermanentRedirects = sut.UsePermanentRedirects(page);
 
-            className.Should().Be(codeName);
+            usePermanentRedirects.Should().Be(options.Value.UsePermanentRedirect);
+        }
+
+        [TestCase(-1, true, true)]
+        [TestCase(-1, false, false)]
+        [TestCase(0, true, false)]
+        [TestCase(1, false, true)]
+        public void UsePermanentRedirects_Will_Return_Custom_Value_When_Set(int value, bool defaultValue, bool expected)
+        {
+            var fixture = new Fixture();
+
+            var options = fixture.CreateOptions();
+            options.Value.UsePermanentRedirect = defaultValue;
+
+            var page = TreeNode.New<TreeNode>().With(p =>
+            {
+                p.DocumentCustomData.SetValue(options.Value.PageUsePermanentRedirectsFieldName, value);
+            });
+
+            var sut = new PageNavigationRedirectsValuesRetriever(options);
+
+            bool usePermanentRedirects = sut.UsePermanentRedirects(page);
+
+            usePermanentRedirects.Should().Be(expected);
         }
     }
 }

@@ -70,5 +70,22 @@ namespace XperienceCommunity.PageNavigationRedirects
                 ? null
                 : className;
         }
+
+        public bool UsePermanentRedirects(TreeNode page)
+        {
+            if (!page.DocumentCustomData.TryGetValue(options.PageUsePermanentRedirectsFieldName, out object customDataValue))
+            {
+                return options.UsePermanentRedirect;
+            }
+
+            int value = ValidationHelper.GetInteger(customDataValue, -1);
+
+            return value switch
+            {
+                0 => false,
+                1 => true,
+                _ or -1 => options.UsePermanentRedirect,
+            };
+        }
     }
 }
