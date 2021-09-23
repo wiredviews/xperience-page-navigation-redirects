@@ -2,7 +2,9 @@
 
 [![NuGet Package](https://img.shields.io/nuget/v/XperienceCommunity.PageNavigationRedirects.svg)](https://www.nuget.org/packages/XperienceCommunity.PageNavigationRedirects)
 
-An ASP.NET Core ResourceFilter that can redirect HTTP requests to other URLs, configurable per Page from the Xperience Administration application
+An ASP.NET Core ResourceFilter that can redirect HTTP requests to other URLs, configurable per Page from the Xperience Administration application.
+
+Watch [video demo](./images/08-redirection-type-selection.mp4) of setting the navigation redirect on a Page.
 
 ## Dependencies
 
@@ -165,10 +167,6 @@ The three fields we add to the custom Page Type allows us to handle the most com
   - The first child Page will be the destination for redirection, so that `NodeOrder` of child Pages effectively controls the redirection URL
 
 An ASP.NET Core [Resource Filter](https://docs.microsoft.com/en-us/aspnet/core/mvc/controllers/filters?view=aspnetcore-5.0#resource-filters) has access to the [PageDataContext](https://docs.xperience.io/developing-websites/implementing-routing/content-tree-based-routing/setting-up-content-tree-based-routing#Settingupcontenttreebasedrouting-Accessingthedataofthecurrentpage) when using [Content Tree based routing](https://docs.xperience.io/developing-websites/implementing-routing/content-tree-based-routing) (custom routing can control redirects programatically). The `PageDataContext` includes the current `TreeNode`, and accessing the Page Navigation Redirection values for the given Page allows the Resource Filter to perform the appropriate redirection.
-
-<video src="./images/08-redirection-type-selection.mp4" controls width="600">
-  <p>Watch [video demo](./images/08-redirection-type-selection.mp4) of setting the navigation redirect on a Page.</p>
-</video>
 
 ## References
 
