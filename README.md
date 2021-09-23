@@ -91,7 +91,7 @@ This package should be used in combination with the [XperienceCommunity.PageCust
 
    ![Base Public Page Page Type fields](./images/04-base-public-page-fields.jpg)
 
-1. Now create an instance of this Page Type and select the options for navigation that you need
+1. Now create an instance of this Page Type and select the options for navigation redirection that you need
 
    ![Article Page Content Form](./images/07-page-content-form.jpg)
 
@@ -115,7 +115,32 @@ This package should be used in combination with the [XperienceCommunity.PageCust
 
 ## How Does It Work?
 
+As of Kentico Xperience Refresh 3, the Page Navigation feature from previous non-Mvc versions of the platform has not been added back.
+
+This feature relied on the `CMS_Document` table `DocumentMenuRedirectUrl` column, which meant it was available for _all_ Pages Types, but this column no longer exists.
+
+By using the [XperienceCommunity.PageCustomDataControlExtender](https://github.com/wiredviews/xperience-page-custom-data-control-extender) package, we can store the data for this feature in the `CMS_Document` table `DocumentCustomData` column, making it available for _all_ Page Types.
+
+The three fields we add to the custom Page Type allows us to handle the most common redirection scenarios:
+
+- No redirection
+  - Normal behavior in which navigating to the Page's URL alias will load that Page's content
+- Internal redirection
+  - Content Managers can select another Page in the Content Tree to redirect to. This stores the destination Page's `NodeGUID`, which means the destination Page can be moved around and we'll always redirect to the correct URL
+- External redirection
+  - Content Managers can enter any valid URL to redirect to
+- First Child
+  - The first child Page will be the destination for redirection, so that `NodeOrder` of child Pages effectively controls the redirection URL
+
+An ASP.NET Core [Resource Filter](https://docs.microsoft.com/en-us/aspnet/core/mvc/controllers/filters?view=aspnetcore-5.0#resource-filters) has access to the [PageDataContext](https://docs.xperience.io/developing-websites/implementing-routing/content-tree-based-routing/setting-up-content-tree-based-routing#Settingupcontenttreebasedrouting-Accessingthedataofthecurrentpage) when using [Content Tree based routing](https://docs.xperience.io/developing-websites/implementing-routing/content-tree-based-routing) (custom routing can control redirects programatically). The `PageDataContext` includes the current `TreeNode`, and accessing the Page Navigation Redirection values for the given Page allows the Resource Filter to perform the appropriate redirection.
+
+<video src="./images/08-redirection-type-selection.mp4" controls width="600"></video>
+
 ## References
+
+### ASP.NET Core
+
+- [Resource Filters](https://docs.microsoft.com/en-us/aspnet/core/mvc/controllers/filters?view=aspnetcore-5.0#resource-filters)
 
 ### Kentico Xperience
 
@@ -123,7 +148,4 @@ This package should be used in combination with the [XperienceCommunity.PageCust
 - [Inheriting from existing form controls](https://docs.xperience.io/custom-development/extending-the-administration-interface/developing-form-controls/inheriting-from-existing-form-controls)
 - [Defining form control parameters](https://docs.xperience.io/custom-development/extending-the-administration-interface/developing-form-controls/defining-form-control-parameters)
 - [XperienceCommunity.PageCustomDataControlExtender](https://github.com/wiredviews/xperience-page-custom-data-control-extender)
-
-```
-
-```
+- [Accessing the data of the current page](https://docs.xperience.io/developing-websites/implementing-routing/content-tree-based-routing/setting-up-content-tree-based-routing#Settingupcontenttreebasedrouting-Accessingthedataofthecurrentpage)
