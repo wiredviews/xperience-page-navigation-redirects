@@ -15,7 +15,7 @@
     <PackageTags>xperience;kentico;aspnetcore</PackageTags>
     <PackageReleaseNotes>https://github.com/wiredviews/xperience-page-navigation-redirects/releases</PackageReleaseNotes>
   </PropertyGroup>
-  
+
   <PropertyGroup>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
@@ -29,5 +29,9 @@
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\images\wv-logo.png" Pack="true" Visible="false" PackagePath="" />
+  </ItemGroup>
 
 </Project>

@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 namespace XperienceCommunity.PageNavigationRedirects
 {
     /// <summary>
-    /// Redirects the current request to another URL based on the <see cref="PageExtensions.RedirectionType(TreeNode)"/> value
+    /// Redirects the current request to another URL based on the <see cref="TreeNodeNavigationFieldExtensions.RedirectionType(TreeNode)"/> value
     /// </summary>
     public class PageCustomDataRedirectResourceFilter : IAsyncResourceFilter
     {
