@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using CMS.DocumentEngine;
+using CMS.Helpers;
 using Kentico.Content.Web.Mvc;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -8,22 +10,25 @@ using Microsoft.AspNetCore.Mvc.Filters;
 namespace XperienceCommunity.PageNavigationRedirects
 {
     /// <summary>
-    /// Redirects the current request to another URL based on the <see cref="TreeNodeNavigationFieldExtensions.RedirectionType(TreeNode)"/> value
+    /// Redirects the current request to another URL based on the <see cref="PageRedirectionType"/> of the current Page
     /// </summary>
     public class PageCustomDataRedirectResourceFilter : IAsyncResourceFilter
     {
         private readonly IPageDataContextRetriever contextRetriever;
         private readonly IPageUrlRetriever urlRetriever;
         private readonly IPageRetriever pageRetriever;
+        private readonly PageNavigationRedirectValuesRetriever valuesRetriever;
 
         public PageCustomDataRedirectResourceFilter(
             IPageDataContextRetriever contextRetriever,
             IPageUrlRetriever urlRetriever,
-            IPageRetriever pageRetriever)
+            IPageRetriever pageRetriever,
+            PageNavigationRedirectValuesRetriever valuesRetriever)
         {
             this.contextRetriever = contextRetriever;
             this.urlRetriever = urlRetriever;
             this.pageRetriever = pageRetriever;
+            this.valuesRetriever = valuesRetriever;
         }
 
         public async Task OnResourceExecutionAsync(ResourceExecutingContext context, ResourceExecutionDelegate next)
@@ -35,7 +40,7 @@ namespace XperienceCommunity.PageNavigationRedirects
 
             var page = data.Page;
 
-            var redirectionType = page.RedirectionType();
+            var redirectionType = valuesRetriever.RedirectionType(page);
 
             if (redirectionType == PageRedirectionType.None)
             {
@@ -44,7 +49,7 @@ namespace XperienceCommunity.PageNavigationRedirects
 
             if (redirectionType == PageRedirectionType.External)
             {
-                string? url = page.ExternalRedirectURL();
+                string? url = valuesRetriever.ExternalRedirectURL(page);
 
                 if (url is string)
                 {
@@ -56,7 +61,7 @@ namespace XperienceCommunity.PageNavigationRedirects
 
             if (redirectionType == PageRedirectionType.Internal)
             {
-                var nodeGuid = page.InternalRedirectNodeGuid();
+                var nodeGuid = valuesRetriever.InternalRedirectNodeGUID(page);
 
                 if (!nodeGuid.HasValue)
                 {
@@ -89,12 +94,39 @@ namespace XperienceCommunity.PageNavigationRedirects
 
             if (redirectionType == PageRedirectionType.FirstChild)
             {
+                string? firstChildClassName = valuesRetriever.FirstChildClassName(page);
+
                 var children = await pageRetriever.RetrieveAsync<TreeNode>(
-                    q => q
-                        .WhereEquals(nameof(TreeNode.NodeParentID), page.NodeID)
-                        .OrderBy(nameof(TreeNode.NodeOrder))
-                        .TopN(1),
-                    c => c.Key($"{nameof(PageCustomDataRedirectResourceFilter)}|{PageRedirectionType.FirstChild}|{page.NodeID}"),
+                    query =>
+                    {
+                        query.WhereEquals(nameof(TreeNode.NodeParentID), page.NodeID);
+
+                        if (!string.IsNullOrWhiteSpace(firstChildClassName))
+                        {
+                            query.WhereEquals(nameof(TreeNode.ClassName), firstChildClassName);
+                        }
+
+                        query
+                            .OrderBy(nameof(TreeNode.NodeOrder))
+                            .TopN(1);
+
+                    },
+                    c =>
+                    {
+                        var keys = new HashSet<string>
+                        {
+                            nameof(PageCustomDataRedirectResourceFilter),
+                            PageRedirectionType.FirstChild.ToString(),
+                            page.NodeID.ToString()
+                        };
+
+                        if (!string.IsNullOrWhiteSpace(firstChildClassName))
+                        {
+                            keys.Add(firstChildClassName);
+                        }
+
+                        c.Key(CacheHelper.BuildCacheItemName(keys));
+                    },
                     cancellationToken: context.HttpContext.RequestAborted);
 
                 if (!children.Any())
