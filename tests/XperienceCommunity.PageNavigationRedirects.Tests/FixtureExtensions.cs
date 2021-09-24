@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoFixture;
+using CMS.DocumentEngine;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
@@ -41,6 +42,18 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
             Task.FromResult(new ResourceExecutedContext(
                 actionContext,
                 new List<IFilterMetadata>())));
+        }
+
+        public static void SetPageDatasourceValue(this TreeNode page, string columnName, object? value, PageNavigationRedirectOptions options)
+        {
+            if (options.UseDocumentCustomData)
+            {
+                page.DocumentCustomData.SetValue(columnName, value);
+            }
+            else
+            {
+                page.NodeCustomData.SetValue(columnName, value);
+            }
         }
     }
 }

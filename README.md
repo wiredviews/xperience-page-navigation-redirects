@@ -162,6 +162,7 @@ This package should be used in combination with the [XperienceCommunity.PageCust
        {
           options.RedirectionTypeFieldName = "RedirectionType";
           options.UsePermanentRedirect = true;
+          options.UseDocumentCustomData = false;
 
           // ...
        });
@@ -188,7 +189,9 @@ The three fields we add to the custom Page Type allows us to handle the most com
   - The first child Page will be the destination for redirection, so that `NodeOrder` of child Pages effectively controls the redirection URL
   - Children can be limited to a specific Page Type via Class Name if there are children of multiple Page Types
 
-All of the redirects can be set to be 301 or 302 globally (global default is 302), and then overridden per-Page
+All of the redirects can be set to be 301 or 302 globally (global default is 302), and then overridden per-Page.
+
+The Navigation Redirect values can be stored in either `TreeNode.DocumentCustomData` (the default) or `TreeNode.NodeCustomData`, depending on the library's configuration.
 
 An ASP.NET Core [Resource Filter](https://docs.microsoft.com/en-us/aspnet/core/mvc/controllers/filters?view=aspnetcore-5.0#resource-filters) has access to the [PageDataContext](https://docs.xperience.io/developing-websites/implementing-routing/content-tree-based-routing/setting-up-content-tree-based-routing#Settingupcontenttreebasedrouting-Accessingthedataofthecurrentpage) when using [Content Tree based routing](https://docs.xperience.io/developing-websites/implementing-routing/content-tree-based-routing) (custom routing can control redirects programatically). The `PageDataContext` includes the current `TreeNode`, and accessing the Page Navigation Redirection values for the given Page allows the Resource Filter to perform the appropriate redirection.
 

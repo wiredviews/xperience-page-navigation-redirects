@@ -67,7 +67,7 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
 
             var page = TreeNode.New<TreeNode>().With(p =>
             {
-                p.DocumentCustomData.SetValue(options.Value.RedirectionTypeFieldName, PageRedirectionType.FirstChild);
+                p.SetPageDatasourceValue(options.Value.RedirectionTypeFieldName, PageRedirectionType.FirstChild, options.Value);
             });
 
             var sut = new PageNavigationRedirectsValuesRetriever(options);
@@ -105,7 +105,7 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
 
             var page = TreeNode.New<TreeNode>().With(p =>
             {
-                p.DocumentCustomData.SetValue(options.Value.ExternalRedirectURLFieldName, "");
+                p.SetPageDatasourceValue(options.Value.ExternalRedirectURLFieldName, "", options.Value);
             });
 
             var sut = new PageNavigationRedirectsValuesRetriever(options);
@@ -125,7 +125,7 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
 
             var page = TreeNode.New<TreeNode>().With(p =>
             {
-                p.DocumentCustomData.SetValue(options.Value.ExternalRedirectURLFieldName, redirectUrl);
+                p.SetPageDatasourceValue(options.Value.ExternalRedirectURLFieldName, redirectUrl, options.Value);
             });
 
             var sut = new PageNavigationRedirectsValuesRetriever(options);
@@ -163,7 +163,7 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
 
             var page = TreeNode.New<TreeNode>().With(p =>
             {
-                p.DocumentCustomData.SetValue(options.Value.InternalRedirectNodeGUIDFieldName, default(Guid));
+                p.SetPageDatasourceValue(options.Value.InternalRedirectNodeGUIDFieldName, default(Guid), options.Value);
             });
 
             var sut = new PageNavigationRedirectsValuesRetriever(options);
@@ -183,7 +183,7 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
 
             var page = TreeNode.New<TreeNode>().With(p =>
             {
-                p.DocumentCustomData.SetValue(options.Value.InternalRedirectNodeGUIDFieldName, guid);
+                p.SetPageDatasourceValue(options.Value.InternalRedirectNodeGUIDFieldName, guid, options.Value);
             });
 
             var sut = new PageNavigationRedirectsValuesRetriever(options);
@@ -221,7 +221,7 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
 
             var page = TreeNode.New<TreeNode>().With(p =>
             {
-                p.DocumentCustomData.SetValue(options.Value.FirstChildClassNameFieldName, "");
+                p.SetPageDatasourceValue(options.Value.FirstChildClassNameFieldName, "", options.Value);
             });
 
             var sut = new PageNavigationRedirectsValuesRetriever(options);
@@ -241,7 +241,7 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
 
             var page = TreeNode.New<TreeNode>().With(p =>
             {
-                p.DocumentCustomData.SetValue(options.Value.FirstChildClassNameFieldName, codeName);
+                p.SetPageDatasourceValue(options.Value.FirstChildClassNameFieldName, codeName, options.Value);
             });
 
             var sut = new PageNavigationRedirectsValuesRetriever(options);
@@ -260,7 +260,7 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
 
             var page = TreeNode.New<TreeNode>().With(p =>
             {
-                p.DocumentCustomData.SetValue(options.Value.PageUsePermanentRedirectsFieldName, null);
+                p.SetPageDatasourceValue(options.Value.PageUsePermanentRedirectsFieldName, null, options.Value);
             });
 
             var sut = new PageNavigationRedirectsValuesRetriever(options);
@@ -283,7 +283,7 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
 
             var page = TreeNode.New<TreeNode>().With(p =>
             {
-                p.DocumentCustomData.SetValue(options.Value.PageUsePermanentRedirectsFieldName, value);
+                p.SetPageDatasourceValue(options.Value.PageUsePermanentRedirectsFieldName, value, options.Value);
             });
 
             var sut = new PageNavigationRedirectsValuesRetriever(options);

@@ -16,7 +16,9 @@ namespace XperienceCommunity.PageNavigationRedirects
 
         public PageRedirectionType RedirectionType(TreeNode page)
         {
-            if (!page.DocumentCustomData.TryGetValue(options.RedirectionTypeFieldName, out object customDataValue))
+            var datasource = GetDatasource(page);
+
+            if (!datasource.TryGetValue(options.RedirectionTypeFieldName, out object customDataValue))
             {
                 return PageRedirectionType.None;
             }
@@ -31,7 +33,9 @@ namespace XperienceCommunity.PageNavigationRedirects
 
         public string? ExternalRedirectURL(TreeNode page)
         {
-            if (!page.DocumentCustomData.TryGetValue(options.ExternalRedirectURLFieldName, out object customDataValue))
+            var datasource = GetDatasource(page);
+
+            if (!datasource.TryGetValue(options.ExternalRedirectURLFieldName, out object customDataValue))
             {
                 return null;
             }
@@ -45,7 +49,9 @@ namespace XperienceCommunity.PageNavigationRedirects
 
         public Guid? InternalRedirectNodeGUID(TreeNode page)
         {
-            if (!page.DocumentCustomData.TryGetValue(options.InternalRedirectNodeGUIDFieldName, out object customDataValue))
+            var datasource = GetDatasource(page);
+
+            if (!datasource.TryGetValue(options.InternalRedirectNodeGUIDFieldName, out object customDataValue))
             {
                 return null;
             }
@@ -59,7 +65,9 @@ namespace XperienceCommunity.PageNavigationRedirects
 
         public string? FirstChildClassName(TreeNode page)
         {
-            if (!page.DocumentCustomData.TryGetValue(options.FirstChildClassNameFieldName, out object customDataValue))
+            var datasource = GetDatasource(page);
+
+            if (!datasource.TryGetValue(options.FirstChildClassNameFieldName, out object customDataValue))
             {
                 return null;
             }
@@ -73,7 +81,9 @@ namespace XperienceCommunity.PageNavigationRedirects
 
         public bool UsePermanentRedirects(TreeNode page)
         {
-            if (!page.DocumentCustomData.TryGetValue(options.PageUsePermanentRedirectsFieldName, out object customDataValue))
+            var datasource = GetDatasource(page);
+
+            if (!datasource.TryGetValue(options.PageUsePermanentRedirectsFieldName, out object customDataValue))
             {
                 return options.UsePermanentRedirect;
             }
@@ -87,5 +97,10 @@ namespace XperienceCommunity.PageNavigationRedirects
                 _ or -1 => options.UsePermanentRedirect,
             };
         }
+
+        private ContainerCustomData GetDatasource(TreeNode page) =>
+            options.UseDocumentCustomData
+                ? page.DocumentCustomData
+                : page.NodeCustomData;
     }
 }

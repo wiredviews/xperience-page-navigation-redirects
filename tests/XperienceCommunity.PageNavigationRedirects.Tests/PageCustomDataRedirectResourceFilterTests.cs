@@ -64,7 +64,7 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
 
             var page = TreeNode.New<TreeNode>().With(p =>
             {
-                p.DocumentCustomData.SetValue(options.Value.RedirectionTypeFieldName, PageRedirectionType.None);
+                p.SetPageDatasourceValue(options.Value.RedirectionTypeFieldName, PageRedirectionType.None, options.Value);
             });
 
             var dataContext = Substitute.For<IPageDataContext<TreeNode>>();
@@ -104,9 +104,9 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
 
             var page = TreeNode.New<TreeNode>().With(p =>
             {
-                p.DocumentCustomData.SetValue(options.Value.RedirectionTypeFieldName, PageRedirectionType.External);
-                p.DocumentCustomData.SetValue(options.Value.ExternalRedirectURLFieldName, redirectUrl);
-                p.DocumentCustomData.SetValue(options.Value.PageUsePermanentRedirectsFieldName, 1);
+                p.SetPageDatasourceValue(options.Value.RedirectionTypeFieldName, PageRedirectionType.External, options.Value);
+                p.SetPageDatasourceValue(options.Value.ExternalRedirectURLFieldName, redirectUrl, options.Value);
+                p.SetPageDatasourceValue(options.Value.PageUsePermanentRedirectsFieldName, 1, options.Value);
             });
 
             var dataContext = Substitute.For<IPageDataContext<TreeNode>>();
@@ -151,8 +151,8 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
 
             var page = TreeNode.New<TreeNode>().With(p =>
             {
-                p.DocumentCustomData.SetValue(options.Value.RedirectionTypeFieldName, PageRedirectionType.Internal);
-                p.DocumentCustomData.SetValue(options.Value.InternalRedirectNodeGUIDFieldName, nodeGUID);
+                p.SetPageDatasourceValue(options.Value.RedirectionTypeFieldName, PageRedirectionType.Internal, options.Value);
+                p.SetPageDatasourceValue(options.Value.InternalRedirectNodeGUIDFieldName, nodeGUID, options.Value);
             });
 
             var dataContext = Substitute.For<IPageDataContext<TreeNode>>();
@@ -215,9 +215,9 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
 
             var page = TreeNode.New<TreeNode>().With(p =>
             {
-                p.DocumentCustomData.SetValue(options.Value.RedirectionTypeFieldName, PageRedirectionType.FirstChild);
-                p.DocumentCustomData.SetValue(options.Value.InternalRedirectNodeGUIDFieldName, nodeGUID);
-                p.DocumentCustomData.SetValue(options.Value.FirstChildClassNameFieldName, className);
+                p.SetPageDatasourceValue(options.Value.RedirectionTypeFieldName, PageRedirectionType.FirstChild, options.Value);
+                p.SetPageDatasourceValue(options.Value.InternalRedirectNodeGUIDFieldName, nodeGUID, options.Value);
+                p.SetPageDatasourceValue(options.Value.FirstChildClassNameFieldName, className, options.Value);
             });
 
             var dataContext = Substitute.For<IPageDataContext<TreeNode>>();
