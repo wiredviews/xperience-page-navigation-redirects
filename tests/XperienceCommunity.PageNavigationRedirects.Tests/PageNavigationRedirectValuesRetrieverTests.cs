@@ -46,10 +46,7 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
 
             var options = fixture.CreateOptions();
 
-            var page = TreeNode.New<TreeNode>().With(p =>
-            {
-                p.DocumentCustomData.SetValue(options.Value.RedirectionTypeFieldName, "hello");
-            });
+            var page = TreeNode.New<TreeNode>().With(p => p.DocumentCustomData.SetValue(options.Value.RedirectionTypeFieldName, "hello"));
 
             var sut = new PageNavigationRedirectsValuesRetriever(options);
 
@@ -65,10 +62,7 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
 
             var options = fixture.CreateOptions();
 
-            var page = TreeNode.New<TreeNode>().With(p =>
-            {
-                p.SetPageDatasourceValue(options.Value.RedirectionTypeFieldName, PageRedirectionType.FirstChild, options.Value);
-            });
+            var page = TreeNode.New<TreeNode>().With(p => p.SetPageDatasourceValue(options.Value.RedirectionTypeFieldName, PageRedirectionType.FirstChild, options.Value));
 
             var sut = new PageNavigationRedirectsValuesRetriever(options);
 
@@ -103,10 +97,7 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
 
             var options = fixture.CreateOptions();
 
-            var page = TreeNode.New<TreeNode>().With(p =>
-            {
-                p.SetPageDatasourceValue(options.Value.ExternalRedirectURLFieldName, "", options.Value);
-            });
+            var page = TreeNode.New<TreeNode>().With(p => p.SetPageDatasourceValue(options.Value.ExternalRedirectURLFieldName, "", options.Value));
 
             var sut = new PageNavigationRedirectsValuesRetriever(options);
 
@@ -123,10 +114,7 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
             var options = fixture.CreateOptions();
             string redirectUrl = fixture.Create<string>();
 
-            var page = TreeNode.New<TreeNode>().With(p =>
-            {
-                p.SetPageDatasourceValue(options.Value.ExternalRedirectURLFieldName, redirectUrl, options.Value);
-            });
+            var page = TreeNode.New<TreeNode>().With(p => p.SetPageDatasourceValue(options.Value.ExternalRedirectURLFieldName, redirectUrl, options.Value));
 
             var sut = new PageNavigationRedirectsValuesRetriever(options);
 
@@ -149,7 +137,7 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
 
             var sut = new PageNavigationRedirectsValuesRetriever(options);
 
-            Guid? nodeGUID = sut.InternalRedirectNodeGUID(page);
+            var nodeGUID = sut.InternalRedirectNodeGUID(page);
 
             nodeGUID.Should().BeNull();
         }
@@ -161,14 +149,11 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
 
             var options = fixture.CreateOptions();
 
-            var page = TreeNode.New<TreeNode>().With(p =>
-            {
-                p.SetPageDatasourceValue(options.Value.InternalRedirectNodeGUIDFieldName, default(Guid), options.Value);
-            });
+            var page = TreeNode.New<TreeNode>().With(p => p.SetPageDatasourceValue(options.Value.InternalRedirectNodeGUIDFieldName, default(Guid), options.Value));
 
             var sut = new PageNavigationRedirectsValuesRetriever(options);
 
-            Guid? nodeGUID = sut.InternalRedirectNodeGUID(page);
+            var nodeGUID = sut.InternalRedirectNodeGUID(page);
 
             nodeGUID.Should().BeNull();
         }
@@ -179,16 +164,13 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
             var fixture = new Fixture();
 
             var options = fixture.CreateOptions();
-            Guid guid = fixture.Create<Guid>();
+            var guid = fixture.Create<Guid>();
 
-            var page = TreeNode.New<TreeNode>().With(p =>
-            {
-                p.SetPageDatasourceValue(options.Value.InternalRedirectNodeGUIDFieldName, guid, options.Value);
-            });
+            var page = TreeNode.New<TreeNode>().With(p => p.SetPageDatasourceValue(options.Value.InternalRedirectNodeGUIDFieldName, guid, options.Value));
 
             var sut = new PageNavigationRedirectsValuesRetriever(options);
 
-            Guid? nodeGUID = sut.InternalRedirectNodeGUID(page);
+            var nodeGUID = sut.InternalRedirectNodeGUID(page);
 
             nodeGUID.Should().Be(guid);
         }
@@ -219,10 +201,7 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
 
             var options = fixture.CreateOptions();
 
-            var page = TreeNode.New<TreeNode>().With(p =>
-            {
-                p.SetPageDatasourceValue(options.Value.FirstChildClassNameFieldName, "", options.Value);
-            });
+            var page = TreeNode.New<TreeNode>().With(p => p.SetPageDatasourceValue(options.Value.FirstChildClassNameFieldName, "", options.Value));
 
             var sut = new PageNavigationRedirectsValuesRetriever(options);
 
@@ -239,10 +218,7 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
             var options = fixture.CreateOptions();
             string codeName = fixture.Create<string>();
 
-            var page = TreeNode.New<TreeNode>().With(p =>
-            {
-                p.SetPageDatasourceValue(options.Value.FirstChildClassNameFieldName, codeName, options.Value);
-            });
+            var page = TreeNode.New<TreeNode>().With(p => p.SetPageDatasourceValue(options.Value.FirstChildClassNameFieldName, codeName, options.Value));
 
             var sut = new PageNavigationRedirectsValuesRetriever(options);
 
@@ -258,10 +234,7 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
 
             var options = fixture.CreateOptions();
 
-            var page = TreeNode.New<TreeNode>().With(p =>
-            {
-                p.SetPageDatasourceValue(options.Value.PageUsePermanentRedirectsFieldName, null, options.Value);
-            });
+            var page = TreeNode.New<TreeNode>().With(p => p.SetPageDatasourceValue(options.Value.PageUsePermanentRedirectsFieldName, null, options.Value));
 
             var sut = new PageNavigationRedirectsValuesRetriever(options);
 
@@ -281,10 +254,7 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
             var options = fixture.CreateOptions();
             options.Value.UsePermanentRedirect = defaultValue;
 
-            var page = TreeNode.New<TreeNode>().With(p =>
-            {
-                p.SetPageDatasourceValue(options.Value.PageUsePermanentRedirectsFieldName, value, options.Value);
-            });
+            var page = TreeNode.New<TreeNode>().With(p => p.SetPageDatasourceValue(options.Value.PageUsePermanentRedirectsFieldName, value, options.Value));
 
             var sut = new PageNavigationRedirectsValuesRetriever(options);
 

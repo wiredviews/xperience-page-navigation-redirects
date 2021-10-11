@@ -26,6 +26,29 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
         }
 
         [Test]
+        public async Task No_Result_Will_Be_Set_When_In_PageBuilder_Edit_Mode()
+        {
+            var fixture = new Fixture();
+
+            var options = fixture.CreateOptions();
+
+            var contextRetriever = Substitute.For<IPageDataContextRetriever>();
+            var urlRetriever = Substitute.For<IPageUrlRetriever>();
+            var pageRetriever = Substitute.For<IPageRetriever>();
+            var valuesRetriever = new PageNavigationRedirectsValuesRetriever(options);
+
+            var accessor = fixture.CreateHttpContextAccessWithPageBuilder(true);
+
+            var sut = new PageCustomDataRedirectResourceFilter(accessor, contextRetriever, urlRetriever, pageRetriever, valuesRetriever, options);
+
+            var (executing, executed) = fixture.CreateFilterContexts();
+
+            await sut.OnResourceExecutionAsync(executing, () => executed);
+
+            executing.Result.Should().BeNull();
+        }
+
+        [Test]
         public async Task No_Result_Will_Be_Set_When_No_PageDataContext_Available()
         {
             var fixture = new Fixture();
@@ -37,11 +60,13 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
             var pageRetriever = Substitute.For<IPageRetriever>();
             var valuesRetriever = new PageNavigationRedirectsValuesRetriever(options);
 
+            var accessor = fixture.CreateHttpContextAccessWithPageBuilder(false);
+
             contextRetriever
-                .TryRetrieve<TreeNode>(out Arg.Any<IPageDataContext<TreeNode>>())
+                .TryRetrieve(out Arg.Any<IPageDataContext<TreeNode>>())
                 .Returns(false);
 
-            var sut = new PageCustomDataRedirectResourceFilter(contextRetriever, urlRetriever, pageRetriever, valuesRetriever, options);
+            var sut = new PageCustomDataRedirectResourceFilter(accessor, contextRetriever, urlRetriever, pageRetriever, valuesRetriever, options);
 
             var (executing, executed) = fixture.CreateFilterContexts();
 
@@ -62,23 +87,22 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
             var pageRetriever = Substitute.For<IPageRetriever>();
             var valuesRetriever = new PageNavigationRedirectsValuesRetriever(options);
 
-            var page = TreeNode.New<TreeNode>().With(p =>
-            {
-                p.SetPageDatasourceValue(options.Value.RedirectionTypeFieldName, PageRedirectionType.None, options.Value);
-            });
+            var accessor = fixture.CreateHttpContextAccessWithPageBuilder(false);
+
+            var page = TreeNode.New<TreeNode>().With(p => p.SetPageDatasourceValue(options.Value.RedirectionTypeFieldName, PageRedirectionType.None, options.Value));
 
             var dataContext = Substitute.For<IPageDataContext<TreeNode>>();
             dataContext.Page.Returns(page);
 
             contextRetriever
-                .TryRetrieve<TreeNode>(out Arg.Any<IPageDataContext<TreeNode>>())
+                .TryRetrieve(out Arg.Any<IPageDataContext<TreeNode>>())
                 .Returns(x =>
                 {
                     x[0] = dataContext;
                     return true;
                 });
 
-            var sut = new PageCustomDataRedirectResourceFilter(contextRetriever, urlRetriever, pageRetriever, valuesRetriever, options);
+            var sut = new PageCustomDataRedirectResourceFilter(accessor, contextRetriever, urlRetriever, pageRetriever, valuesRetriever, options);
 
             var (executing, executed) = fixture.CreateFilterContexts();
 
@@ -100,6 +124,8 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
             var pageRetriever = Substitute.For<IPageRetriever>();
             var valuesRetriever = new PageNavigationRedirectsValuesRetriever(options);
 
+            var accessor = fixture.CreateHttpContextAccessWithPageBuilder(false);
+
             string redirectUrl = fixture.Create<string>();
 
             var page = TreeNode.New<TreeNode>().With(p =>
@@ -113,14 +139,14 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
             dataContext.Page.Returns(page);
 
             contextRetriever
-                .TryRetrieve<TreeNode>(out Arg.Any<IPageDataContext<TreeNode>>())
+                .TryRetrieve(out Arg.Any<IPageDataContext<TreeNode>>())
                 .Returns(x =>
                 {
                     x[0] = dataContext;
                     return true;
                 });
 
-            var sut = new PageCustomDataRedirectResourceFilter(contextRetriever, urlRetriever, pageRetriever, valuesRetriever, options);
+            var sut = new PageCustomDataRedirectResourceFilter(accessor, contextRetriever, urlRetriever, pageRetriever, valuesRetriever, options);
 
             var (executing, executed) = fixture.CreateFilterContexts();
 
@@ -147,7 +173,9 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
             var pageRetriever = Substitute.For<IPageRetriever>();
             var valuesRetriever = new PageNavigationRedirectsValuesRetriever(options);
 
-            Guid nodeGUID = fixture.Create<Guid>();
+            var accessor = fixture.CreateHttpContextAccessWithPageBuilder(false);
+
+            var nodeGUID = fixture.Create<Guid>();
 
             var page = TreeNode.New<TreeNode>().With(p =>
             {
@@ -159,7 +187,7 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
             dataContext.Page.Returns(page);
 
             contextRetriever
-                .TryRetrieve<TreeNode>(out Arg.Any<IPageDataContext<TreeNode>>())
+                .TryRetrieve(out Arg.Any<IPageDataContext<TreeNode>>())
                 .Returns(x =>
                 {
                     x[0] = dataContext;
@@ -171,7 +199,7 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
 
             });
 
-            pageRetriever.RetrieveAsync<TreeNode>(
+            pageRetriever.RetrieveAsync(
                 Arg.Any<Action<DocumentQuery<TreeNode>>>(),
                 Arg.Any<Action<IPageCacheBuilder<TreeNode>>>(),
                 Arg.Any<CancellationToken>())
@@ -183,7 +211,7 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
                 .Retrieve(linkedPage)
                 .Returns(new PageUrl { RelativePath = redirectUrl });
 
-            var sut = new PageCustomDataRedirectResourceFilter(contextRetriever, urlRetriever, pageRetriever, valuesRetriever, options);
+            var sut = new PageCustomDataRedirectResourceFilter(accessor, contextRetriever, urlRetriever, pageRetriever, valuesRetriever, options);
 
             var (executing, executed) = fixture.CreateFilterContexts();
 
@@ -210,7 +238,9 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
             var pageRetriever = Substitute.For<IPageRetriever>();
             var valuesRetriever = new PageNavigationRedirectsValuesRetriever(options);
 
-            Guid nodeGUID = fixture.Create<Guid>();
+            var accessor = fixture.CreateHttpContextAccessWithPageBuilder(false);
+
+            var nodeGUID = fixture.Create<Guid>();
             string className = fixture.Create<string>();
 
             var page = TreeNode.New<TreeNode>().With(p =>
@@ -224,7 +254,7 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
             dataContext.Page.Returns(page);
 
             contextRetriever
-                .TryRetrieve<TreeNode>(out Arg.Any<IPageDataContext<TreeNode>>())
+                .TryRetrieve(out Arg.Any<IPageDataContext<TreeNode>>())
                 .Returns(x =>
                 {
                     x[0] = dataContext;
@@ -236,7 +266,7 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
 
             });
 
-            pageRetriever.RetrieveAsync<TreeNode>(
+            pageRetriever.RetrieveAsync(
                 Arg.Any<Action<DocumentQuery<TreeNode>>>(),
                 Arg.Any<Action<IPageCacheBuilder<TreeNode>>>(),
                 Arg.Any<CancellationToken>())
@@ -248,7 +278,7 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
                 .Retrieve(linkedPage)
                 .Returns(new PageUrl { RelativePath = redirectUrl });
 
-            var sut = new PageCustomDataRedirectResourceFilter(contextRetriever, urlRetriever, pageRetriever, valuesRetriever, options);
+            var sut = new PageCustomDataRedirectResourceFilter(accessor, contextRetriever, urlRetriever, pageRetriever, valuesRetriever, options);
 
             var (executing, executed) = fixture.CreateFilterContexts();
 

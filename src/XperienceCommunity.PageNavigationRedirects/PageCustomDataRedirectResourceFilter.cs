@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using CMS.DocumentEngine;
 using CMS.Helpers;
 using Kentico.Content.Web.Mvc;
+using Kentico.PageBuilder.Web.Mvc;
+using Kentico.Web.Mvc;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Options;
@@ -17,6 +20,7 @@ namespace XperienceCommunity.PageNavigationRedirects
     /// </summary>
     public class PageCustomDataRedirectResourceFilter : IAsyncResourceFilter
     {
+        private readonly IHttpContextAccessor accessor;
         private readonly IPageDataContextRetriever contextRetriever;
         private readonly IPageUrlRetriever urlRetriever;
         private readonly IPageRetriever pageRetriever;
@@ -24,12 +28,14 @@ namespace XperienceCommunity.PageNavigationRedirects
         private readonly PageNavigationRedirectOptions options;
 
         public PageCustomDataRedirectResourceFilter(
+            IHttpContextAccessor accessor,
             IPageDataContextRetriever contextRetriever,
             IPageUrlRetriever urlRetriever,
             IPageRetriever pageRetriever,
             PageNavigationRedirectsValuesRetriever valuesRetriever,
             IOptions<PageNavigationRedirectOptions> options)
         {
+            this.accessor = accessor;
             this.contextRetriever = contextRetriever;
             this.urlRetriever = urlRetriever;
             this.pageRetriever = pageRetriever;
@@ -53,6 +59,11 @@ namespace XperienceCommunity.PageNavigationRedirects
 
         private async Task<IActionResult?> HandleRedirectionInternal(CancellationToken token)
         {
+            if (accessor.HttpContext.Kentico().PageBuilder().EditMode)
+            {
+                return null;
+            }
+
             if (!contextRetriever.TryRetrieve<TreeNode>(out var data))
             {
                 return null;
