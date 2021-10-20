@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 using CMS.DocumentEngine;
 using CMS.Helpers;
 using Kentico.Content.Web.Mvc;
-using Kentico.PageBuilder.Web.Mvc;
-using Kentico.Web.Mvc;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Options;
+using XperienceCommunity.PageBuilderUtilities;
 
 namespace XperienceCommunity.PageNavigationRedirects
 {
@@ -20,7 +18,7 @@ namespace XperienceCommunity.PageNavigationRedirects
     /// </summary>
     public class PageCustomDataRedirectResourceFilter : IAsyncResourceFilter
     {
-        private readonly IHttpContextAccessor accessor;
+        private readonly IPageBuilderContext context;
         private readonly IPageDataContextRetriever contextRetriever;
         private readonly IPageUrlRetriever urlRetriever;
         private readonly IPageRetriever pageRetriever;
@@ -28,14 +26,14 @@ namespace XperienceCommunity.PageNavigationRedirects
         private readonly PageNavigationRedirectOptions options;
 
         public PageCustomDataRedirectResourceFilter(
-            IHttpContextAccessor accessor,
+            IPageBuilderContext context,
             IPageDataContextRetriever contextRetriever,
             IPageUrlRetriever urlRetriever,
             IPageRetriever pageRetriever,
             PageNavigationRedirectsValuesRetriever valuesRetriever,
             IOptions<PageNavigationRedirectOptions> options)
         {
-            this.accessor = accessor;
+            this.context = context;
             this.contextRetriever = contextRetriever;
             this.urlRetriever = urlRetriever;
             this.pageRetriever = pageRetriever;
@@ -59,7 +57,12 @@ namespace XperienceCommunity.PageNavigationRedirects
 
         private async Task<IActionResult?> HandleRedirectionInternal(CancellationToken token)
         {
-            if (accessor.HttpContext.Kentico().PageBuilder().EditMode)
+            if (context.IsEditMode)
+            {
+                return null;
+            }
+
+            if (options.RedirectInLivePreviewMode && context.IsLivePreviewMode)
             {
                 return null;
             }

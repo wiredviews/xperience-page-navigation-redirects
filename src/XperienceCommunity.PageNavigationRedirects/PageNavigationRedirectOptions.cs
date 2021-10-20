@@ -1,4 +1,5 @@
 using CMS.DocumentEngine;
+using XperienceCommunity.PageBuilderUtilities;
 
 namespace XperienceCommunity.PageNavigationRedirects
 {
@@ -43,5 +44,10 @@ namespace XperienceCommunity.PageNavigationRedirects
         /// </summary>
         /// <value></value>
         public bool UseDocumentCustomData { get; set; } = true;
+        /// <summary>
+        /// If true, then visiting the Page in Page Builder <see cref="PageBuilderMode.LivePreview"/> will result in an HTTP redirect.
+        /// Defaults to false.
+        /// </summary>
+        public bool RedirectInLivePreviewMode { get; set; } = false;
     }
 }

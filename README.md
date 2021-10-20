@@ -12,6 +12,8 @@ This package is compatible with Kentico Xperience 13 ASP.NET Core applications.
 
 This package should be used in combination with the [XperienceCommunity.PageCustomDataControlExtender](https://github.com/wiredviews/xperience-page-custom-data-control-extender)
 
+This package has a depenency on [XperienceCommunity.PageBuilderUtilities](https://github.com/wiredviews/xperience-page-builder-utilities), which will be installed and configured automatically.
+
 ## How to Use?
 
 1.  Add the [XperienceCommunity.PageCustomDataControlExtender](https://github.com/wiredviews/xperience-page-custom-data-control-extender) NuGet package to the CMSApp administration application
@@ -52,13 +54,13 @@ This package should be used in combination with the [XperienceCommunity.PageCust
 
        ![Custom URL Checker control](./images/03a-text-box-form-control.jpg)
 
-    1. (optional) The "Three state checkbox" Form Control
+    1. (optional) The "Check box" Form Control
 
        - Used for setting the redirect status code (301 vs 302) per-Page
-       - Use Control for: `Integer number`
+       - Use Control for: `Boolean (yes/no)`
        - Show control in: `Page types`
 
-       ![Custom Check box control](./images/03b-three-state-check-box-form-control.jpg)
+       ![Custom Check box control](./images/03b-check-box-form-control.jpg)
 
 1.  Install the NuGet package in your Kentico Xperience live site (Content Delivery) ASP.NET Core project
 
@@ -120,9 +122,9 @@ This package should be used in combination with the [XperienceCommunity.PageCust
     1.  Permanent Redirect (Optional)
 
         - Field name: `PageUsePermanentRedirects`
-        - Data type: `Integer number`
+        - Data type: `Boolean (Yes/No))`
         - Field caption: `Use Permanent (301) Redirects?`
-        - Form control: `Page CustomData Three state check box`
+        - Form control: `Page CustomData Check box`
         - Visibility condition: `{% PageRedirectionType == "External" || PageRedirectionType == "Internal" || PageRedirectionType == "FirstChild" %}`
         - Depends on another field: `true`
 
@@ -163,6 +165,7 @@ This package should be used in combination with the [XperienceCommunity.PageCust
           options.RedirectionTypeFieldName = "RedirectionType";
           options.UsePermanentRedirect = true;
           options.UseDocumentCustomData = false;
+          options.RedirectInLivePreviewMode = true;
 
           // ...
        });

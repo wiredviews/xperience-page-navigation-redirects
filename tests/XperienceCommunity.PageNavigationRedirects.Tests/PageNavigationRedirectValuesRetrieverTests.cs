@@ -243,11 +243,11 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
             usePermanentRedirects.Should().Be(options.Value.UsePermanentRedirect);
         }
 
-        [TestCase(-1, true, true)]
-        [TestCase(-1, false, false)]
-        [TestCase(0, true, false)]
-        [TestCase(1, false, true)]
-        public void UsePermanentRedirects_Will_Return_Custom_Value_When_Set(int value, bool defaultValue, bool expected)
+        [TestCase(true, true, true)]
+        [TestCase(false, false, false)]
+        [TestCase(false, true, false)]
+        [TestCase(true, false, true)]
+        public void UsePermanentRedirects_Will_Return_Custom_Value_When_Set(bool value, bool defaultValue, bool expected)
         {
             var fixture = new Fixture();
 

@@ -9,10 +9,8 @@ namespace XperienceCommunity.PageNavigationRedirects
     {
         private readonly PageNavigationRedirectOptions options;
 
-        public PageNavigationRedirectsValuesRetriever(IOptions<PageNavigationRedirectOptions> options)
-        {
+        public PageNavigationRedirectsValuesRetriever(IOptions<PageNavigationRedirectOptions> options) =>
             this.options = options.Value ?? throw new ArgumentNullException(nameof(options.Value));
-        }
 
         public PageRedirectionType RedirectionType(TreeNode page)
         {
@@ -88,14 +86,7 @@ namespace XperienceCommunity.PageNavigationRedirects
                 return options.UsePermanentRedirect;
             }
 
-            int value = ValidationHelper.GetInteger(customDataValue, -1);
-
-            return value switch
-            {
-                0 => false,
-                1 => true,
-                _ or -1 => options.UsePermanentRedirect,
-            };
+            return ValidationHelper.GetBoolean(customDataValue, options.UsePermanentRedirect);
         }
 
         private ContainerCustomData GetDatasource(TreeNode page) =>

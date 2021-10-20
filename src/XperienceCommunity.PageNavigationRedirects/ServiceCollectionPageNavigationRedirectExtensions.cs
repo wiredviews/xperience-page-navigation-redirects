@@ -14,7 +14,8 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddPageNavigationRedirects(this IServiceCollection services, Action<PageNavigationRedirectOptions> configureOptions) =>
             services
                 .AddPageNavigationRedirects()
-                .Configure<PageNavigationRedirectOptions>(configureOptions);
+                .Configure(configureOptions)
+                .AddPageBuilderContext();
 
         /// <summary>
         /// Adds Page Navigation Redirects functionality
@@ -24,10 +25,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddPageNavigationRedirects(this IServiceCollection services) =>
             services
                 .AddTransient<PageNavigationRedirectsValuesRetriever>()
-                .AddControllersWithViews(options =>
-                {
-                    options.Filters.Add(typeof(PageCustomDataRedirectResourceFilter));
-                })
+                .AddControllersWithViews(options => options.Filters.Add(typeof(PageCustomDataRedirectResourceFilter)))
                 .Services
                 .AddOptions<PageNavigationRedirectOptions>()
                 .Services;

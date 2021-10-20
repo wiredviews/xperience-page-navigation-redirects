@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using NUnit.Framework;
 using Tests.DocumentEngine;
+using XperienceCommunity.PageBuilderUtilities;
 
 namespace XperienceCommunity.PageNavigationRedirects.Tests
 {
@@ -37,9 +38,36 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
             var pageRetriever = Substitute.For<IPageRetriever>();
             var valuesRetriever = new PageNavigationRedirectsValuesRetriever(options);
 
-            var accessor = fixture.CreateHttpContextAccessWithPageBuilder(true);
+            var context = Substitute.For<IPageBuilderContext>();
+            context.IsEditMode.Returns(true);
 
-            var sut = new PageCustomDataRedirectResourceFilter(accessor, contextRetriever, urlRetriever, pageRetriever, valuesRetriever, options);
+            var sut = new PageCustomDataRedirectResourceFilter(context, contextRetriever, urlRetriever, pageRetriever, valuesRetriever, options);
+
+            var (executing, executed) = fixture.CreateFilterContexts();
+
+            await sut.OnResourceExecutionAsync(executing, () => executed);
+
+            executing.Result.Should().BeNull();
+        }
+
+        [Test]
+        public async Task No_Result_Will_Be_Set_When_In_PageBuilder_Preview_Mode_And_Preview_Redirection_Is_Enabled()
+        {
+            var fixture = new Fixture();
+
+            var options = fixture.CreateOptions();
+
+            var contextRetriever = Substitute.For<IPageDataContextRetriever>();
+            var urlRetriever = Substitute.For<IPageUrlRetriever>();
+            var pageRetriever = Substitute.For<IPageRetriever>();
+            var valuesRetriever = new PageNavigationRedirectsValuesRetriever(options);
+
+            var context = Substitute.For<IPageBuilderContext>();
+            context.IsEditMode.Returns(false);
+            context.IsLivePreviewMode.Returns(true);
+            options.Value.RedirectInLivePreviewMode = true;
+
+            var sut = new PageCustomDataRedirectResourceFilter(context, contextRetriever, urlRetriever, pageRetriever, valuesRetriever, options);
 
             var (executing, executed) = fixture.CreateFilterContexts();
 
@@ -60,13 +88,14 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
             var pageRetriever = Substitute.For<IPageRetriever>();
             var valuesRetriever = new PageNavigationRedirectsValuesRetriever(options);
 
-            var accessor = fixture.CreateHttpContextAccessWithPageBuilder(false);
+            var context = Substitute.For<IPageBuilderContext>();
+            context.IsEditMode.Returns(false);
 
             contextRetriever
                 .TryRetrieve(out Arg.Any<IPageDataContext<TreeNode>>())
                 .Returns(false);
 
-            var sut = new PageCustomDataRedirectResourceFilter(accessor, contextRetriever, urlRetriever, pageRetriever, valuesRetriever, options);
+            var sut = new PageCustomDataRedirectResourceFilter(context, contextRetriever, urlRetriever, pageRetriever, valuesRetriever, options);
 
             var (executing, executed) = fixture.CreateFilterContexts();
 
@@ -87,7 +116,8 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
             var pageRetriever = Substitute.For<IPageRetriever>();
             var valuesRetriever = new PageNavigationRedirectsValuesRetriever(options);
 
-            var accessor = fixture.CreateHttpContextAccessWithPageBuilder(false);
+            var context = Substitute.For<IPageBuilderContext>();
+            context.IsEditMode.Returns(false);
 
             var page = TreeNode.New<TreeNode>().With(p => p.SetPageDatasourceValue(options.Value.RedirectionTypeFieldName, PageRedirectionType.None, options.Value));
 
@@ -102,7 +132,7 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
                     return true;
                 });
 
-            var sut = new PageCustomDataRedirectResourceFilter(accessor, contextRetriever, urlRetriever, pageRetriever, valuesRetriever, options);
+            var sut = new PageCustomDataRedirectResourceFilter(context, contextRetriever, urlRetriever, pageRetriever, valuesRetriever, options);
 
             var (executing, executed) = fixture.CreateFilterContexts();
 
@@ -124,7 +154,8 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
             var pageRetriever = Substitute.For<IPageRetriever>();
             var valuesRetriever = new PageNavigationRedirectsValuesRetriever(options);
 
-            var accessor = fixture.CreateHttpContextAccessWithPageBuilder(false);
+            var context = Substitute.For<IPageBuilderContext>();
+            context.IsEditMode.Returns(false);
 
             string redirectUrl = fixture.Create<string>();
 
@@ -132,7 +163,7 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
             {
                 p.SetPageDatasourceValue(options.Value.RedirectionTypeFieldName, PageRedirectionType.External, options.Value);
                 p.SetPageDatasourceValue(options.Value.ExternalRedirectURLFieldName, redirectUrl, options.Value);
-                p.SetPageDatasourceValue(options.Value.PageUsePermanentRedirectsFieldName, 1, options.Value);
+                p.SetPageDatasourceValue(options.Value.PageUsePermanentRedirectsFieldName, true, options.Value);
             });
 
             var dataContext = Substitute.For<IPageDataContext<TreeNode>>();
@@ -146,7 +177,7 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
                     return true;
                 });
 
-            var sut = new PageCustomDataRedirectResourceFilter(accessor, contextRetriever, urlRetriever, pageRetriever, valuesRetriever, options);
+            var sut = new PageCustomDataRedirectResourceFilter(context, contextRetriever, urlRetriever, pageRetriever, valuesRetriever, options);
 
             var (executing, executed) = fixture.CreateFilterContexts();
 
@@ -173,7 +204,8 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
             var pageRetriever = Substitute.For<IPageRetriever>();
             var valuesRetriever = new PageNavigationRedirectsValuesRetriever(options);
 
-            var accessor = fixture.CreateHttpContextAccessWithPageBuilder(false);
+            var context = Substitute.For<IPageBuilderContext>();
+            context.IsEditMode.Returns(false);
 
             var nodeGUID = fixture.Create<Guid>();
 
@@ -211,7 +243,7 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
                 .Retrieve(linkedPage)
                 .Returns(new PageUrl { RelativePath = redirectUrl });
 
-            var sut = new PageCustomDataRedirectResourceFilter(accessor, contextRetriever, urlRetriever, pageRetriever, valuesRetriever, options);
+            var sut = new PageCustomDataRedirectResourceFilter(context, contextRetriever, urlRetriever, pageRetriever, valuesRetriever, options);
 
             var (executing, executed) = fixture.CreateFilterContexts();
 
@@ -238,7 +270,8 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
             var pageRetriever = Substitute.For<IPageRetriever>();
             var valuesRetriever = new PageNavigationRedirectsValuesRetriever(options);
 
-            var accessor = fixture.CreateHttpContextAccessWithPageBuilder(false);
+            var context = Substitute.For<IPageBuilderContext>();
+            context.IsEditMode.Returns(false);
 
             var nodeGUID = fixture.Create<Guid>();
             string className = fixture.Create<string>();
@@ -278,7 +311,7 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
                 .Retrieve(linkedPage)
                 .Returns(new PageUrl { RelativePath = redirectUrl });
 
-            var sut = new PageCustomDataRedirectResourceFilter(accessor, contextRetriever, urlRetriever, pageRetriever, valuesRetriever, options);
+            var sut = new PageCustomDataRedirectResourceFilter(context, contextRetriever, urlRetriever, pageRetriever, valuesRetriever, options);
 
             var (executing, executed) = fixture.CreateFilterContexts();
 

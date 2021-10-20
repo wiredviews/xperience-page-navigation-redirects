@@ -17,19 +17,17 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
 {
     public static class FixtureExtensions
     {
-        public static IOptions<PageNavigationRedirectOptions> CreateOptions(this Fixture fixture)
-        {
-            return Options.Create(new PageNavigationRedirectOptions
+        public static IOptions<PageNavigationRedirectOptions> CreateOptions(this Fixture fixture) =>
+            Options.Create(new PageNavigationRedirectOptions
             {
                 ExternalRedirectURLFieldName = fixture.Create<string>(),
                 FirstChildClassNameFieldName = fixture.Create<string>(),
                 InternalRedirectNodeGUIDFieldName = fixture.Create<string>(),
                 RedirectionTypeFieldName = fixture.Create<string>(),
-                UsePermanentRedirect = fixture.Create<bool>()
+                UsePermanentRedirect = fixture.Create<bool>(),
             });
-        }
 
-        public static (ResourceExecutingContext, Task<ResourceExecutedContext>) CreateFilterContexts(this Fixture fixture)
+        public static (ResourceExecutingContext, Task<ResourceExecutedContext>) CreateFilterContexts(this Fixture _)
         {
             var actionContext = new ActionContext
             {
@@ -59,7 +57,7 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
             }
         }
 
-        public static IHttpContextAccessor CreateHttpContextAccessWithPageBuilder(this Fixture fixture, bool isPageBuilderEnabled)
+        public static IHttpContextAccessor CreateHttpContextAccessWithPageBuilder(this Fixture _, bool isPageBuilderEnabled)
         {
             var pageBuilderFeature = Substitute.For<IPageBuilderFeature>();
             pageBuilderFeature.EditMode.Returns(isPageBuilderEnabled);
