@@ -2,8 +2,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoFixture;
 using CMS.DocumentEngine;
-using Kentico.PageBuilder.Web.Mvc;
-using Kentico.Web.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
@@ -11,7 +9,6 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Options;
-using NSubstitute;
 
 namespace XperienceCommunity.PageNavigationRedirects.Tests
 {
@@ -55,22 +52,6 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
             {
                 page.NodeCustomData.SetValue(columnName, value);
             }
-        }
-
-        public static IHttpContextAccessor CreateHttpContextAccessWithPageBuilder(this Fixture _, bool isPageBuilderEnabled)
-        {
-            var pageBuilderFeature = Substitute.For<IPageBuilderFeature>();
-            pageBuilderFeature.EditMode.Returns(isPageBuilderEnabled);
-            var features = Substitute.For<IFeatureSet>();
-            features.GetFeature<IPageBuilderFeature>().Returns(pageBuilderFeature);
-
-            var context = new DefaultHttpContext();
-            context.Items.Add("Kentico.Features", features);
-
-            var accessor = Substitute.For<IHttpContextAccessor>();
-            accessor.HttpContext.Returns(context);
-
-            return accessor;
         }
     }
 }
