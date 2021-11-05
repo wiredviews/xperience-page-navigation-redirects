@@ -3,6 +3,9 @@ using XperienceCommunity.PageBuilderUtilities;
 
 namespace XperienceCommunity.PageNavigationRedirects
 {
+    /// <summary>
+    /// Configuration settings for Page redirection across the entire application
+    /// </summary>
     public class PageNavigationRedirectOptions
     {
         /// <summary>

@@ -5,6 +5,9 @@ using Microsoft.Extensions.Options;
 
 namespace XperienceCommunity.PageNavigationRedirects
 {
+    /// <summary>
+    /// Provides convenient access to Page-specific redirect configuration
+    /// </summary>
     public class PageNavigationRedirectsValuesRetriever
     {
         private readonly PageNavigationRedirectOptions options;
