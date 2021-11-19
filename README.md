@@ -198,6 +198,8 @@ The Navigation Redirect values can be stored in either `TreeNode.DocumentCustomD
 
 An ASP.NET Core [Resource Filter](https://docs.microsoft.com/en-us/aspnet/core/mvc/controllers/filters?view=aspnetcore-5.0#resource-filters) has access to the [PageDataContext](https://docs.xperience.io/developing-websites/implementing-routing/content-tree-based-routing/setting-up-content-tree-based-routing#Settingupcontenttreebasedrouting-Accessingthedataofthecurrentpage) when using [Content Tree based routing](https://docs.xperience.io/developing-websites/implementing-routing/content-tree-based-routing) (custom routing can control redirects programatically). The `PageDataContext` includes the current `TreeNode`, and accessing the Page Navigation Redirection values for the given Page allows the Resource Filter to perform the appropriate redirection.
 
+This package will log Page configuration errors (missing required values, references to deleted or non-existant Pages) to the Kentico Xperience Event Log under the source `PageNavigationRedirects`, with various event codes depending on the redirection type.
+
 ## References
 
 ### ASP.NET Core

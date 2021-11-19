@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using CMS.Core;
 using CMS.DocumentEngine;
 using CMS.Helpers;
 using Kentico.Content.Web.Mvc;
@@ -23,6 +24,7 @@ namespace XperienceCommunity.PageNavigationRedirects
         private readonly IPageUrlRetriever urlRetriever;
         private readonly IPageRetriever pageRetriever;
         private readonly PageNavigationRedirectsValuesRetriever valuesRetriever;
+        private readonly IEventLogService log;
         private readonly PageNavigationRedirectOptions options;
 
         public PageCustomDataRedirectResourceFilter(
@@ -31,6 +33,7 @@ namespace XperienceCommunity.PageNavigationRedirects
             IPageUrlRetriever urlRetriever,
             IPageRetriever pageRetriever,
             PageNavigationRedirectsValuesRetriever valuesRetriever,
+            IEventLogService log,
             IOptions<PageNavigationRedirectOptions> options)
         {
             this.context = context;
@@ -38,6 +41,7 @@ namespace XperienceCommunity.PageNavigationRedirects
             this.urlRetriever = urlRetriever;
             this.pageRetriever = pageRetriever;
             this.valuesRetriever = valuesRetriever;
+            this.log = log;
             this.options = options.Value ?? throw new ArgumentNullException(nameof(options.Value));
         }
 
@@ -62,7 +66,7 @@ namespace XperienceCommunity.PageNavigationRedirects
                 return null;
             }
 
-            if (options.RedirectInLivePreviewMode && context.IsLivePreviewMode)
+            if (context.IsLivePreviewMode && !options.RedirectInLivePreviewMode)
             {
                 return null;
             }
@@ -87,9 +91,17 @@ namespace XperienceCommunity.PageNavigationRedirects
             {
                 string? url = valuesRetriever.ExternalRedirectURL(page);
 
-                return url is null
-                    ? null
-                    : new RedirectResult(url, usePermanentRedirects);
+                if (string.IsNullOrWhiteSpace(url))
+                {
+                    log.LogError(
+                       "PageNavigationRedirects",
+                       "REDIRECT_EXTERNAL",
+                       $"Page [{page.DocumentID}] [{page.NodeAliasPath}] has no specified External URL for redirection.");
+
+                    return null;
+                }
+
+                return new RedirectResult(url, usePermanentRedirects);
             }
 
             if (redirectionType == PageRedirectionType.Internal)
@@ -98,6 +110,11 @@ namespace XperienceCommunity.PageNavigationRedirects
 
                 if (!nodeGuid.HasValue)
                 {
+                    log.LogError(
+                        "PageNavigationRedirects",
+                        "REDIRECT_INTERNAL",
+                        $"Page [{page.DocumentID}] [{page.NodeAliasPath}] has no specified Internal Page Node for redirection.");
+
                     return null;
                 }
 
@@ -110,6 +127,11 @@ namespace XperienceCommunity.PageNavigationRedirects
 
                 if (linkedPage is null)
                 {
+                    log.LogError(
+                        "PageNavigationRedirects",
+                        "REDIRECT_INTERNAL",
+                        $"Page [{page.DocumentID}] [{page.NodeAliasPath}] Internal Redirection cannot complete because Page Node [{nodeGuid.Value}], does not exist.");
+
                     return null;
                 }
 
@@ -156,8 +178,14 @@ namespace XperienceCommunity.PageNavigationRedirects
                     },
                     cancellationToken: token);
 
-                if (!children.Any())
+                if (children.Count() == 0)
                 {
+                    string description = string.IsNullOrWhiteSpace(firstChildClassName)
+                        ? $"Page [{page.DocumentID}] [{page.NodeAliasPath}] has no children to redirect to."
+                        : $"Page [{page.DocumentID}] [{page.NodeAliasPath}] has no children of Type [{firstChildClassName}] to redirect to.";
+
+                    log.LogError("PageNavigationRedirects", "REDIRECT_FIRST_CHILD", description);
+
                     return null;
                 }
 
@@ -165,9 +193,18 @@ namespace XperienceCommunity.PageNavigationRedirects
 
                 var url = urlRetriever.Retrieve(firstChild);
 
-                return url is null
-                    ? null
-                    : new RedirectResult(url.RelativePath, usePermanentRedirects);
+                if (url is null || string.IsNullOrWhiteSpace(url.RelativePath))
+                {
+                    string description = string.IsNullOrWhiteSpace(firstChildClassName)
+                        ? $"Child Page [{firstChild.DocumentID}] [{firstChild.NodeAliasPath}] has no URL to redirect to."
+                        : $"Child Page [{firstChild.DocumentID}] [{firstChild.NodeAliasPath}] of Type [{firstChildClassName}] has no URL to redirect to.";
+
+                    log.LogError("PageNavigationRedirects", "REDIRECT_FIRST_CHILD", description);
+
+                    return null;
+                }
+
+                return new RedirectResult(url.RelativePath, usePermanentRedirects);
             }
 
             return null;

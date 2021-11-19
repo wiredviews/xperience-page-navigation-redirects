@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoFixture;
+using CMS.Core;
 using CMS.DataEngine;
 using CMS.DocumentEngine;
 using CMS.Tests;
@@ -36,12 +37,13 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
             var contextRetriever = Substitute.For<IPageDataContextRetriever>();
             var urlRetriever = Substitute.For<IPageUrlRetriever>();
             var pageRetriever = Substitute.For<IPageRetriever>();
+            var log = Substitute.For<IEventLogService>();
             var valuesRetriever = new PageNavigationRedirectsValuesRetriever(options);
 
             var context = Substitute.For<IPageBuilderContext>();
             context.IsEditMode.Returns(true);
 
-            var sut = new PageCustomDataRedirectResourceFilter(context, contextRetriever, urlRetriever, pageRetriever, valuesRetriever, options);
+            var sut = new PageCustomDataRedirectResourceFilter(context, contextRetriever, urlRetriever, pageRetriever, valuesRetriever, log, options);
 
             var (executing, executed) = fixture.CreateFilterContexts();
 
@@ -60,6 +62,7 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
             var contextRetriever = Substitute.For<IPageDataContextRetriever>();
             var urlRetriever = Substitute.For<IPageUrlRetriever>();
             var pageRetriever = Substitute.For<IPageRetriever>();
+            var log = Substitute.For<IEventLogService>();
             var valuesRetriever = new PageNavigationRedirectsValuesRetriever(options);
 
             var context = Substitute.For<IPageBuilderContext>();
@@ -67,7 +70,7 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
             context.IsLivePreviewMode.Returns(true);
             options.Value.RedirectInLivePreviewMode = true;
 
-            var sut = new PageCustomDataRedirectResourceFilter(context, contextRetriever, urlRetriever, pageRetriever, valuesRetriever, options);
+            var sut = new PageCustomDataRedirectResourceFilter(context, contextRetriever, urlRetriever, pageRetriever, valuesRetriever, log, options);
 
             var (executing, executed) = fixture.CreateFilterContexts();
 
@@ -86,6 +89,7 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
             var contextRetriever = Substitute.For<IPageDataContextRetriever>();
             var urlRetriever = Substitute.For<IPageUrlRetriever>();
             var pageRetriever = Substitute.For<IPageRetriever>();
+            var log = Substitute.For<IEventLogService>();
             var valuesRetriever = new PageNavigationRedirectsValuesRetriever(options);
 
             var context = Substitute.For<IPageBuilderContext>();
@@ -95,7 +99,7 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
                 .TryRetrieve(out Arg.Any<IPageDataContext<TreeNode>>())
                 .Returns(false);
 
-            var sut = new PageCustomDataRedirectResourceFilter(context, contextRetriever, urlRetriever, pageRetriever, valuesRetriever, options);
+            var sut = new PageCustomDataRedirectResourceFilter(context, contextRetriever, urlRetriever, pageRetriever, valuesRetriever, log, options);
 
             var (executing, executed) = fixture.CreateFilterContexts();
 
@@ -114,6 +118,7 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
             var contextRetriever = Substitute.For<IPageDataContextRetriever>();
             var urlRetriever = Substitute.For<IPageUrlRetriever>();
             var pageRetriever = Substitute.For<IPageRetriever>();
+            var log = Substitute.For<IEventLogService>();
             var valuesRetriever = new PageNavigationRedirectsValuesRetriever(options);
 
             var context = Substitute.For<IPageBuilderContext>();
@@ -132,7 +137,7 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
                     return true;
                 });
 
-            var sut = new PageCustomDataRedirectResourceFilter(context, contextRetriever, urlRetriever, pageRetriever, valuesRetriever, options);
+            var sut = new PageCustomDataRedirectResourceFilter(context, contextRetriever, urlRetriever, pageRetriever, valuesRetriever, log, options);
 
             var (executing, executed) = fixture.CreateFilterContexts();
 
@@ -152,6 +157,7 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
             var contextRetriever = Substitute.For<IPageDataContextRetriever>();
             var urlRetriever = Substitute.For<IPageUrlRetriever>();
             var pageRetriever = Substitute.For<IPageRetriever>();
+            var log = Substitute.For<IEventLogService>();
             var valuesRetriever = new PageNavigationRedirectsValuesRetriever(options);
 
             var context = Substitute.For<IPageBuilderContext>();
@@ -177,7 +183,7 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
                     return true;
                 });
 
-            var sut = new PageCustomDataRedirectResourceFilter(context, contextRetriever, urlRetriever, pageRetriever, valuesRetriever, options);
+            var sut = new PageCustomDataRedirectResourceFilter(context, contextRetriever, urlRetriever, pageRetriever, valuesRetriever, log, options);
 
             var (executing, executed) = fixture.CreateFilterContexts();
 
@@ -202,6 +208,7 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
             var contextRetriever = Substitute.For<IPageDataContextRetriever>();
             var urlRetriever = Substitute.For<IPageUrlRetriever>();
             var pageRetriever = Substitute.For<IPageRetriever>();
+            var log = Substitute.For<IEventLogService>();
             var valuesRetriever = new PageNavigationRedirectsValuesRetriever(options);
 
             var context = Substitute.For<IPageBuilderContext>();
@@ -243,7 +250,7 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
                 .Retrieve(linkedPage)
                 .Returns(new PageUrl { RelativePath = redirectUrl });
 
-            var sut = new PageCustomDataRedirectResourceFilter(context, contextRetriever, urlRetriever, pageRetriever, valuesRetriever, options);
+            var sut = new PageCustomDataRedirectResourceFilter(context, contextRetriever, urlRetriever, pageRetriever, valuesRetriever, log, options);
 
             var (executing, executed) = fixture.CreateFilterContexts();
 
@@ -268,6 +275,7 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
             var contextRetriever = Substitute.For<IPageDataContextRetriever>();
             var urlRetriever = Substitute.For<IPageUrlRetriever>();
             var pageRetriever = Substitute.For<IPageRetriever>();
+            var log = Substitute.For<IEventLogService>();
             var valuesRetriever = new PageNavigationRedirectsValuesRetriever(options);
 
             var context = Substitute.For<IPageBuilderContext>();
@@ -311,7 +319,7 @@ namespace XperienceCommunity.PageNavigationRedirects.Tests
                 .Retrieve(linkedPage)
                 .Returns(new PageUrl { RelativePath = redirectUrl });
 
-            var sut = new PageCustomDataRedirectResourceFilter(context, contextRetriever, urlRetriever, pageRetriever, valuesRetriever, options);
+            var sut = new PageCustomDataRedirectResourceFilter(context, contextRetriever, urlRetriever, pageRetriever, valuesRetriever, log, options);
 
             var (executing, executed) = fixture.CreateFilterContexts();
 
