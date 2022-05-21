@@ -200,6 +200,15 @@ An ASP.NET Core [Resource Filter](https://docs.microsoft.com/en-us/aspnet/core/m
 
 This package will log Page configuration errors (missing required values, references to deleted or non-existant Pages) to the Kentico Xperience Event Log under the source `PageNavigationRedirects`, with various event codes depending on the redirection type.
 
+## Contributing
+
+To build this project, you must have v6.0.300 or higher
+of the [.NET SDK](https://dotnet.microsoft.com/en-us/download/dotnet/6.0) installed.
+
+If you've found a bug or have a feature request, please [open an issue](https://github.com/wiredviews/xperience-page-navigation-redirects/issues/new) on GitHub.
+
+If you'd like to make a contribution, you can create a [PR on GitHub](https://github.com/wiredviews/xperience-page-navigation-redirects/compare).
+
 ## References
 
 ### ASP.NET Core
