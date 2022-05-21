@@ -61,7 +61,7 @@ namespace XperienceCommunity.PageNavigationRedirects
 
             return nodeGUID == default
                 ? null
-                : nodeGUID;
+                : (Guid?)nodeGUID;
         }
 
         public string? FirstChildClassName(TreeNode page)
