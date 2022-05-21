@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Kentico.Xperience.AspNetCore.WebApp" VersionOverride="13.0.70" />
+    <PackageReference Include="Kentico.Xperience.Libraries.Tests"/>
     <PackageReference Include="AutoFixture"/>
     <PackageReference Include="FluentAssertions" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
@@ -21,10 +23,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\XperienceCommunity.PageNavigationRedirects\XperienceCommunity.PageNavigationRedirects.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Kentico.Xperience.Libraries.Tests"/>
   </ItemGroup>
 
 </Project>
